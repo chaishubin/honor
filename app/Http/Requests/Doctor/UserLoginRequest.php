@@ -24,8 +24,9 @@ class UserLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'phone_number' => 'required|numeric|max:11',
-            'code' => 'required|max:4',
+            'phone_number' => ['required','regex:/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/'],
+            'pic_code' => 'required|max:6',
+            'sms_code' => 'nullable|numeric|digits:4',
         ];
     }
 }

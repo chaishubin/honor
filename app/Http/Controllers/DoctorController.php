@@ -331,6 +331,9 @@ class DoctorController extends Controller
                                 $user_token = $user->access_token = Common::createSessionKey();
                                 $user->save();
 
+                                //把access_token 存入session
+                                $request->session()->put('user_token',$user_token);
+
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha'.$info['phone_number']);
 
@@ -359,7 +362,7 @@ class DoctorController extends Controller
             }
         }
     }
-    
+
 
     /**
      * @param UserAwardListRequest $request
@@ -372,15 +375,18 @@ class DoctorController extends Controller
 
         $check = UserModel::where('phone_number',$info['phone_number'])->first();
 
-        if (!$check){
+        if (!$check || $check['access_token'] != $info['user_token']){
             return Common::jsonFormat('500','用户信息不正确');
         }
 
         try{
             $user = $check;
-            //把用户的access_tolen清空
+            //把用户的user_token清空
             $user->access_token = '';
             $user->save();
+
+            //清空session中的 user_token , sms_flag , sms_code
+            $request->session()->forget(['user_token','sms_flag','sms_code'.$info['phone_number']]);
 
             return Common::jsonFormat('200','退出成功');
         } catch (\Exception $e){

@@ -83,6 +83,19 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
+                    <h5>用户退出: <small class="link">/api/doctor/userLogout</small></h5>
+                    <form role="form" action="/api/doctor/userLogout">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>user_token</span><input name="user_token" placeholder="user_token" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>报名注册: <small class="link">/api/doctor/signUp</small></h5>
                     <form role="form" action="/api/doctor/signUp">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
