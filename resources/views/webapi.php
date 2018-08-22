@@ -57,8 +57,8 @@
                 <li>
                     <h3>荣耀医者</h3>
                     <div class="item-doc">
-                        <h5>报名信息列表: <small class="link">/api/doctor/signUpList</small></h5>
-                        <form role="form" action="/api/doctor/signUpList">
+                        <h5>报名信息列表: <small class="link">/api/manager/signUpList</small></h5>
+                        <form role="form" action="/api/manager/signUpList">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
                                 <span class="input-group-addon">name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
@@ -85,8 +85,8 @@
                         </form>
                     </div>
                     <div class="item-doc">
-                        <h5>报名信息详情: <small class="link">/api/doctor/signUpInfoDetail</small></h5>
-                        <form role="form" action="/api/doctor/signUpInfoDetail">
+                        <h5>报名信息详情: <small class="link">/api/manager/signUpInfoDetail</small></h5>
+                        <form role="form" action="/api/manager/signUpInfoDetail">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="审核信息id，对应列表接口中的id" value="" type="text" class="form-control">
@@ -95,8 +95,8 @@
                         </form>
                     </div>
                     <div class="item-doc">
-                        <h5>审核内容列表: <small class="link">/api/doctor/signUpInfoReviewList</small></h5>
-                        <form role="form" action="/api/doctor/signUpInfoReviewList">
+                        <h5>审核内容列表: <small class="link">/api/manager/signUpInfoReviewList</small></h5>
+                        <form role="form" action="/api/manager/signUpInfoReviewList">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>info_id</span><input name="info_id" placeholder="审核信息id，对应列表接口中的id" value="" type="text" class="form-control">
@@ -105,8 +105,8 @@
                         </form>
                     </div>
                     <div class="item-doc">
-                        <h5>报名信息审核: <small class="link">/api/doctor/signUpInfoReview</small></h5>
-                        <form role="form" action="/api/doctor/signUpInfoReview">
+                        <h5>报名信息审核: <small class="link">/api/manager/signUpInfoReview</small></h5>
+                        <form role="form" action="/api/manager/signUpInfoReview">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>info_id</span><input name="info_id" placeholder="审核信息id，对应列表接口中的id" value="" type="text" class="form-control">
@@ -119,6 +119,86 @@
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>review_way</span><input name="review_way" placeholder="审核方式，1单条审核，2批量审核" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <h3>管理员</h3>
+                    <div class="item-doc">
+                        <h5>管理员列表: <small class="link">/api/manager/managerList</small></h5>
+                        <form role="form" action="/api/manager/managerList">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon">nickname</span><input name="nickname" placeholder="昵称" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">account</span><input name="account" placeholder="账户" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">role</span><input name="role" placeholder="角色" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">cur_page</span><input name="cur_page" placeholder="当前页数" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">length</span><input name="length" placeholder="条数" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>管理员添加: <small class="link">/api/manager/managerAdd</small></h5>
+                        <form role="form" action="/api/manager/managerAdd">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>nickname</span><input name="nickname" placeholder="昵称" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>account</span><input name="account" placeholder="账户" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>password</span><input name="password" placeholder="密码" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>role</span><input name="role" placeholder="角色" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">note</span><input name="note" placeholder="备注" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>管理员删除: <small class="link">/api/manager/managerDelete</small></h5>
+                        <form role="form" action="/api/manager/managerDelete">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id[]" placeholder="管理员id" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>管理员登录: <small class="link">/api/manager/managerLogin</small></h5>
+                        <form role="form" action="/api/manager/managerLogin">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>account</span><input name="account" placeholder="管理员昵称或账号" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>password</span><input name="password" placeholder="密码" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>管理员退出登录: <small class="link">/api/manager/managerLogout</small></h5>
+                        <form role="form" action="/api/manager/managerLogout">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>manager_token</span><input name="manager_token" placeholder="登录token" value="" type="text" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

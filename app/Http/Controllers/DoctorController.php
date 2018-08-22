@@ -266,6 +266,7 @@ class DoctorController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * 用户注册、登录、发送短信验证码
+     * 注意：客户端登录成功之后，需要客户端把user_token存入cookie中
      */
     public function userLogin(UserLoginRequest $request)
     {
@@ -275,11 +276,11 @@ class DoctorController extends Controller
         $session_captcha = $request->session()->get('captcha'.$info['phone_number'],'captcha');
 
 
-        if (!$request->session()->has('sms_flag')){
-            $request->session()->put('sms_flag','false');
+        if (!$request->session()->has('sms_flag'.$info['phone_number'])){
+            $request->session()->put('sms_flag'.$info['phone_number'],'false');
         }
 
-        $flag = $request->session()->get('sms_flag');
+        $flag = $request->session()->get('sms_flag'.$info['phone_number']);
 
         if ($session_captcha != $info['pic_code']){
             return Common::jsonFormat('500','请输入正确的验证码哟');
@@ -288,7 +289,7 @@ class DoctorController extends Controller
                 //发送短信验证码
                 $res = SmsController::sendMessage($request, $info['phone_number']);
                 if ($res){
-                    $request->session()->put('sms_flag','true');
+                    $request->session()->put('sms_flag'.$info['phone_number'],'true');
                     return Common::jsonFormat('200','短信验证码发送成功');
                 }else{
                     return Common::jsonFormat('500','短信验证码发送失败');
@@ -313,6 +314,9 @@ class DoctorController extends Controller
                                 $user->status = 1;//默认启用
                                 $user->save();
 
+                                //把access_token 存入session
+                                $request->session()->put($user_token,$info['phone_number']);
+
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha'.$info['phone_number']);
 
@@ -332,7 +336,7 @@ class DoctorController extends Controller
                                 $user->save();
 
                                 //把access_token 存入session
-                                $request->session()->put('user_token',$user_token);
+                                $request->session()->put($user_token,$info['phone_number']);
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha'.$info['phone_number']);
@@ -374,10 +378,12 @@ class DoctorController extends Controller
         $info = $request->all();
 
         $check = UserModel::where('phone_number',$info['phone_number'])->first();
+        $session_token = $request->session()->get($check['access_token']);
 
-        if (!$check || $check['access_token'] != $info['user_token']){
+        if (!$check || $check['access_token'] != $info['user_token'] || $session_token != $check['phone_number']){
             return Common::jsonFormat('500','用户信息不正确');
         }
+
 
         try{
             $user = $check;
@@ -386,7 +392,7 @@ class DoctorController extends Controller
             $user->save();
 
             //清空session中的 user_token , sms_flag , sms_code
-            $request->session()->forget(['user_token','sms_flag','sms_code'.$info['phone_number']]);
+            $request->session()->forget([$check['access_token'],'sms_flag','sms_code'.$info['phone_number']]);
 
             return Common::jsonFormat('200','退出成功');
         } catch (\Exception $e){

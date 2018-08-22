@@ -36,5 +36,8 @@ Route::any('/sendMessage','SmsController@sendMessage');
 Route::group(['middleware' => ['web'], 'prefix' => '/api/doctor'], function () {
     Route::post('showCaptcha','Common@showCaptcha');
     Route::post('userLogin','DoctorController@userLogin');
-    Route::post('userLogout','DoctorController@userLogout');
+});
+
+Route::group(['middleware' => ['web'], 'prefix' => '/api/manager'], function () {
+    Route::post('managerLogin','ManagerController@managerLogin');
 });
