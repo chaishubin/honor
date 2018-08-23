@@ -270,6 +270,7 @@ class DoctorController extends Controller
      */
     public function userLogin(UserLoginRequest $request)
     {
+        return 999;
         $info = $request->all();
 
         //获取session中的captcha
