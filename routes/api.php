@@ -32,6 +32,7 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::any('testHospital','DoctorController@testHospital');
 });
 
+
 Route::group(['prefix' => '/doctor'], function () {
     Route::post('userLogin','DoctorController@userLogin');
 });
