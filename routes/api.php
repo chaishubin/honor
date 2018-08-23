@@ -33,9 +33,9 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
 });
 
 
-Route::group(['prefix' => '/doctor'], function () {
-    Route::post('userLogin','DoctorController@userLogin');
-});
+//Route::group(['prefix' => '/doctor'], function () {
+//    Route::post('userLogin','DoctorController@userLogin');
+//});
 
 
 Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], function () {
