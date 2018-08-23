@@ -271,7 +271,6 @@ class DoctorController extends Controller
     public function userLogin(UserLoginRequest $request)
     {
         $info = $request->all();
-        return $info['phone_number'].$info['pic_code'].$info['sms_code'];
 
         //获取session中的captcha
         $session_captcha = $request->session()->get('captcha'.$info['phone_number'],'captcha');
