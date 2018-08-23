@@ -34,7 +34,7 @@ Route::any('/sendMessage','SmsController@sendMessage');
 
 
 Route::group(['middleware' => ['web'], 'prefix' => '/api/doctor'], function () {
-    Route::post('showCaptcha','Common@showCaptcha');
+//    Route::post('showCaptcha','Common@showCaptcha');
     Route::post('userLogin','DoctorController@userLogin');
 });
 
