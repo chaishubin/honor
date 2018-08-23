@@ -13,7 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
 //        '/api/doctor/showCaptcha',
-//        '/api/doctor/userLogin',
+        '/api/doctor/userLogin',
 //        '/api/manager/managerLogin',
     ];
 }
