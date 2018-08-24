@@ -288,7 +288,7 @@ class DoctorController extends Controller
                 //发送短信验证码
                 $res = SmsController::sendMessage($request, $info['phone_number']);
                 if ($res){
-                    $request->session()->put('sms_flag'.$info['phone_number'],'true');
+                    $request->session()->put('sms_flag','true');
                     return Common::jsonFormat('200','短信验证码发送成功');
                 }else{
                     return Common::jsonFormat('500','短信验证码发送失败');
