@@ -264,7 +264,6 @@ class Common
      */
     public function showCaptcha(UserAwardListRequest $request)
     {
-        $info = $request->all();
         $builder = new CaptchaBuilder();
 
         $builder->build()->save('captcha.jpg');

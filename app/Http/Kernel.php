@@ -44,7 +44,7 @@ class Kernel extends HttpKernel
             'bindings',
         ],
         'checkUserLogin' => [
-            \App\Http\Middleware\EncryptCookies::class,
+//            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\CheckUserIsLogin::class,
