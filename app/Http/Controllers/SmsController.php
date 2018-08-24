@@ -48,7 +48,7 @@ class SmsController extends Controller
             //4 位随机验证码
             $code = str_pad(rand(1,9999),4,rand(0,9));
 
-            $request->session()->put('sms_code'.$phone_number,$code);
+            $request->session()->put('sms_code',$code);
 
             $easySms->send($phone_number, [
                 'template' => '200747', //伙伴医生用户端 荣耀医者 验证码
