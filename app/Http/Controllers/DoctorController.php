@@ -284,7 +284,7 @@ class DoctorController extends Controller
         if ($session_captcha != $info['pic_code']){
             return Common::jsonFormat('500','请输入正确的验证码哟');
         }else{
-            if ($info['sms_code'] == ''){
+            if (!isset($info['sms_code']) || $info['sms_code'] == ''){
                 //发送短信验证码
                 $res = SmsController::sendMessage($request, $info['phone_number']);
                 if ($res){

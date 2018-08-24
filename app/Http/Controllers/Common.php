@@ -275,8 +275,6 @@ class Common
         $request->session()->put('captcha',$phrase);
 
         return $builder->inline();
-
-//        return response()->file(public_path()."/captcha.jpg");
     }
 
 }
