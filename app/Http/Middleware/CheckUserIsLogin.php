@@ -21,7 +21,7 @@ class CheckUserIsLogin
         $session_token = $request->session()->exists($cookie_token);
         $tt = $request->session()->get('$cookie_token');
         $all = $request->session()->all();
-        Log::info('all:'.$all);
+        Log::info('all:'.json_encode($all));
         Log::info('tt'.$tt);
         Log::info('$session:'.$session_token);
         if (!$cookie_token || !$session_token){
