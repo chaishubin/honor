@@ -273,14 +273,13 @@ class DoctorController extends Controller
         $info = $request->all();
 
         //获取session中的captcha
-        $session_captcha = $request->session()->get('captcha'.$info['phone_number'],'captcha');
+        $session_captcha = $request->session()->get('captcha','captcha');
 
-
-        if (!$request->session()->has('sms_flag'.$info['phone_number'])){
-            $request->session()->put('sms_flag'.$info['phone_number'],'false');
+        if (!$request->session()->has('sms_flag')){
+            $request->session()->put('sms_flag','false');
         }
 
-        $flag = $request->session()->get('sms_flag'.$info['phone_number']);
+        $flag = $request->session()->get('sms_flag');
 
         if ($session_captcha != $info['pic_code']){
             return Common::jsonFormat('500','请输入正确的验证码哟');
@@ -297,7 +296,7 @@ class DoctorController extends Controller
             }else{
                 if ($flag === 'true'){
                     //获取session中的sms_code
-                    $session_sms_code = $request->session()->get('sms_code'.$info['phone_number']);
+                    $session_sms_code = $request->session()->get('sms_code');
                     //对比短信验证码是否正确
                     if ($info['sms_code'] == $session_sms_code){
 
@@ -318,14 +317,14 @@ class DoctorController extends Controller
                                 $request->session()->put($user_token,$info['phone_number']);
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                                $request->session()->forget('captcha'.$info['phone_number']);
+                                $request->session()->forget('captcha');
 
                                 return Common::jsonFormat('200','注册成功',$user_token);
                             } catch (\Exception $e){
                                 Log::error($e);
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                                $request->session()->forget('captcha'.$info['phone_number']);
+                                $request->session()->forget('captcha');
 
                                 return Common::jsonFormat('500','注册失败');
                             }
@@ -339,13 +338,13 @@ class DoctorController extends Controller
                                 $request->session()->put($user_token,$info['phone_number']);
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                                $request->session()->forget('captcha'.$info['phone_number']);
+                                $request->session()->forget('captcha');
 
                                 return Common::jsonFormat('200','登录成功',$user_token);
                             } catch (\Exception $e){
                                 Log::error($e);
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                                $request->session()->forget('captcha'.$info['phone_number']);
+                                $request->session()->forget('captcha');
 
                                 return Common::jsonFormat('500','登录失败');
                             }
@@ -353,13 +352,13 @@ class DoctorController extends Controller
 
                     }else{
                         //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                        $request->session()->forget('captcha'.$info['phone_number']);
+                        $request->session()->forget('captcha');
 
                         return Common::jsonFormat('500','短信验证码不正确');
                     }
                 }else{
                     //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                    $request->session()->forget('captcha'.$info['phone_number']);
+                    $request->session()->forget('captcha');
 
                     return Common::jsonFormat('500','请先获取验证码');
                 }
@@ -392,7 +391,7 @@ class DoctorController extends Controller
             $user->save();
 
             //清空session中的 user_token , sms_flag , sms_code
-            $request->session()->forget([$check['access_token'],'sms_flag','sms_code'.$info['phone_number']]);
+            $request->session()->forget([$check['access_token'],'sms_flag','sms_code']);
 
             return Common::jsonFormat('200','退出成功');
         } catch (\Exception $e){

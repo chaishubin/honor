@@ -60,9 +60,6 @@ h2{ margin:0; padding:25px 0; }
                     <h5>图形验证码: <small class="link">/api/doctor/showCaptcha</small></h5>
                     <form role="form" action="/api/doctor/showCaptcha">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
-                        <div class="input-group">
-                            <span class="input-group-addon"><em>*</em>phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
-                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

@@ -272,7 +272,7 @@ class Common
         $phrase = $builder->getPhrase();
 
         //把生成的验证码的值存入session中
-        $request->session()->put('captcha'.$info['phone_number'],$phrase);
+        $request->session()->put('captcha',$phrase);
 
         return response()->file(public_path()."/captcha.jpg");
     }
