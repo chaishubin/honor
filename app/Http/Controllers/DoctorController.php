@@ -416,11 +416,21 @@ class DoctorController extends Controller
      * @return \Illuminate\Http\JsonResponse|string
      * 用户已报名、未报名奖项列表
      */
-    public function userAwardList(UserAwardListRequest $request)
+    public function userAwardList(Request $request)
     {
-        $info = $request->all();
+        $user_token = $request->session()->get('user_token');
+        if (!$user_token){
+            return Common::jsonFormat('500','token错误');
+        }
+        $user_phone_number = UserModel::where('access_token',$user_token)->first('phone_number');
+        if (!$user_phone_number){
+            return Common::jsonFormat('500','用户信息错误');
+        }
 
-        $doctor = DoctorModel::where('phone_number',$info['phone_number'])->get(['wanted_award']);
+        $doctor = DoctorModel::where('phone_number',$user_phone_number['phone_number'])->get(['wanted_award']);
+        if (!$doctor){
+            return Common::jsonFormat('500','奖项列表获取失败');
+        }
 
         //把所有奖项列表赋给此变量
         $all = $this->configAward();

@@ -20,11 +20,16 @@ class CheckUserIsLogin
         $cookie_token = $request->cookie('user_token');
         Log::info($cookie_token);
         $session_token = $request->session()->exists($cookie_token);
+        //存储user_token
+        $request->session()->put('user_token',$cookie_token);
         Log::info('$session:'.$session_token);
         if (!$cookie_token || !$session_token){
             Log::info('用户尝试非法登录，其尝试的user_token是：'.$cookie_token);
             return Common::jsonFormat('500','server reject !');
         }
+
+        //存储user_token
+        $request->session()->put('user_token',$cookie_token);
 
         return $next($request);
     }
