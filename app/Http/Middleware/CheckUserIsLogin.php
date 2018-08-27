@@ -17,7 +17,7 @@ class CheckUserIsLogin
      */
     public function handle($request, Closure $next)
     {
-        $cookie_token = $request->cookie('rongyao_session');
+        $cookie_token = $request->cookie('user_token');
         Log::info($cookie_token);
         $session_token = $request->session()->exists($cookie_token);
         Log::info('$session:'.$session_token);
