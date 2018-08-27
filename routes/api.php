@@ -26,11 +26,12 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
 
    Route::post('configAward','DoctorController@configAward');
    Route::post('configJobTitle','DoctorController@configJobTitle');
-   Route::post('userAwardList','DoctorController@userAwardList');
+//   Route::post('userAwardList','DoctorController@userAwardList');
 
    //test
    Route::any('testHospital','DoctorController@testHospital');
 });
+Route::post('/doctor/userAwardList','DoctorController@userAwardList');
 
 Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
     Route::post('showCaptcha','Common@showCaptcha');

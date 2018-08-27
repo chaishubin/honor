@@ -422,7 +422,8 @@ class DoctorController extends Controller
         if (!$user_token){
             return Common::jsonFormat('500','token错误');
         }
-        $user_phone_number = UserModel::where('access_token',$user_token)->first('phone_number');
+        $user_phone_number = UserModel::where('access_token',$user_token)->first(['phone_number']);
+
         if (!$user_phone_number){
             return Common::jsonFormat('500','用户信息错误');
         }
