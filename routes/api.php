@@ -32,6 +32,14 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::any('testHospital','DoctorController@testHospital');
 });
 
+Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
+    Route::post('showCaptcha','Common@showCaptcha');
+    Route::post('userLogin','DoctorController@userLogin');
+});
+
+Route::group(['middleware' => ['session'], 'prefix' => '/manager'], function () {
+    Route::post('managerLogin','ManagerController@managerLogin');
+});
 
 Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], function () {
     Route::post('managerList','ManagerController@managerList')->middleware('checkManagerRoleLogin');

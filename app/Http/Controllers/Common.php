@@ -261,9 +261,11 @@ class Common
      * @param UserAwardListRequest $request
      * @return mixed
      * 生成并输出图片验证码
+     * UserAwardListRequest
      */
     public function showCaptcha(UserAwardListRequest $request)
     {
+//        return response('success')->cookie('user_token','169bde25959e904fc0b89e635597f798');
         $builder = new CaptchaBuilder();
 
         $builder->build()->save('captcha.jpg');

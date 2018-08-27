@@ -43,9 +43,14 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
-        'checkUserLogin' => [
-//            \App\Http\Middleware\EncryptCookies::class,
+        'session' => [
             \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+        ],
+        'checkUserLogin' => [
+            \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\CheckUserIsLogin::class,
         ],

@@ -17,12 +17,9 @@ class CheckUserIsLogin
      */
     public function handle($request, Closure $next)
     {
-        $cookie_token = $request->cookie('user_token');
+        $cookie_token = $request->cookie('rongyao_session');
+        Log::info($cookie_token);
         $session_token = $request->session()->exists($cookie_token);
-        $tt = $request->session()->get('$cookie_token');
-        $all = $request->session()->all();
-        Log::info('all:'.json_encode($all));
-        Log::info('tt'.$tt);
         Log::info('$session:'.$session_token);
         if (!$cookie_token || !$session_token){
             Log::info('用户尝试非法登录，其尝试的user_token是：'.$cookie_token);

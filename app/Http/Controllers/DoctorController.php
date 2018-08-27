@@ -279,7 +279,6 @@ class DoctorController extends Controller
             $request->session()->put('sms_flag','false');
         }
 
-        $flag = $request->session()->get('sms_flag');
 
         if ($session_captcha != $info['pic_code']){
             return Common::jsonFormat('500','请输入正确的验证码哟');
@@ -294,6 +293,8 @@ class DoctorController extends Controller
                     return Common::jsonFormat('500','短信验证码发送失败');
                 }
             }else{
+                $flag = $request->session()->get('sms_flag');
+
                 if ($flag === 'true'){
                     //获取session中的sms_code
                     $session_sms_code = $request->session()->get('sms_code');
@@ -316,8 +317,10 @@ class DoctorController extends Controller
                                 //把access_token 存入session
                                 $request->session()->put($user_token,$info['phone_number']);
 
-                                //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
-                                $request->session()->forget('captcha');
+                                $id = $request->session()->getId();
+                                $name = $request->session()->getName();
+
+                                Log::info('session_id:'.$id.$name);
 
                                 return Common::jsonFormat('200','注册成功',$user_token);
                             } catch (\Exception $e){
@@ -336,9 +339,15 @@ class DoctorController extends Controller
 
                                 //把access_token 存入session
                                 $request->session()->put($user_token,$info['phone_number']);
+//                                $request->session()->save();
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha');
+
+                                $id = $request->session()->getId();
+                                $name = $request->session()->getName();
+
+                                Log::info('session_id:'.$id.$name);
 
                                 return Common::jsonFormat('200','登录成功',$user_token);
                             } catch (\Exception $e){
