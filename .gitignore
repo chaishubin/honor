@@ -1,7 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
-public/captcha.jpg
+/public/captcha.jpg
 /storage/*.key
 /vendor
 /.idea
