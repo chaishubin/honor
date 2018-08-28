@@ -2,15 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Components\Fdfs;
-use App\Http\Requests\Doctor\UserAwardListRequest;
-use Faker\Provider\File;
 use Gregwar\Captcha\CaptchaBuilder;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 /**
  * Class Common
@@ -258,14 +251,12 @@ class Common
     }
 
     /**
-     * @param UserAwardListRequest $request
+     * @param Request $request
      * @return mixed
      * 生成并输出图片验证码
-     * UserAwardListRequest
      */
-    public function showCaptcha(UserAwardListRequest $request)
+    public function showCaptcha(Request $request)
     {
-//        return response('success')->cookie('user_token','169bde25959e904fc0b89e635597f798');
         $builder = new CaptchaBuilder();
 
         $builder->build()->save('captcha.jpg');

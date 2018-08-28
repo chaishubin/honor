@@ -29,7 +29,7 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::post('userAwardList','DoctorController@userAwardList');
 
    //test
-   Route::any('testHospital','DoctorController@testHospital');
+//   Route::any('testHospital','DoctorController@testHospital');
 });
 
 Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
