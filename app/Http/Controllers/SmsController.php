@@ -30,7 +30,7 @@ class SmsController extends Controller
                     'file' => '/tmp/easy-sms.log',
                 ],
                 'yuntongxun' => [
-                    'app_id' => '8a216da858ce0b3c0158dc8136c70a1f',
+                    'app_id' => '8aaf070865796a57016584a5b6b209b1',
                     'account_sid' => '8a216da858ce0b3c0158d858552007ae',
                     'account_token' => '935f27ac69d840c9acc4d795224045c4',
                     'is_sub_account' => false,
@@ -51,7 +51,7 @@ class SmsController extends Controller
             $request->session()->put('sms_code',$code);
 
             $easySms->send($phone_number, [
-                'template' => '200747', //伙伴医生用户端 荣耀医者 验证码
+                'template' => '321042', //荣耀医者2018 荣耀医者2018 验证码
                 'data' => [$code],
             ]);
 
