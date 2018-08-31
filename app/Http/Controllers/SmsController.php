@@ -8,7 +8,7 @@ use Overtrue\EasySms\EasySms;
 
 class SmsController extends Controller
 {
-    public static function sendMessage(Request $request, $phone_number)
+    public static function sendMessage(Request $request, $phone_number,$time = 60)
     {
         $config = [
             // HTTP 请求的超时时间（秒）
@@ -43,19 +43,28 @@ class SmsController extends Controller
         }
 
         try {
+            $session_last_send_time = $request->session()->get('last_send_time') ?: 0;
+            $space_time = time() - $session_last_send_time;
+            //判断短信发送的时间间隔
+            if ($space_time < $time){
+                return '500';
+            }
+
             $easySms = new EasySms($config);
 
             //4 位随机验证码
             $code = str_pad(rand(1,9999),4,rand(0,9));
-
-            $request->session()->put('sms_code',$code);
 
             $easySms->send($phone_number, [
                 'template' => '321042', //荣耀医者2018 荣耀医者2018 验证码
                 'data' => [$code],
             ]);
 
-            return true;
+            //把短信验证码存入session
+            $request->session()->put('sms_code',$code);
+            $request->session()->put('last_send_time',time());
+
+            return '200';
 
         }catch (\Exception $e){
             Log::info($e->getException('yuntongxun'));

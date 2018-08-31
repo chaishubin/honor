@@ -17,6 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+    //test
+//   Route::any('testHospital','DoctorController@testHospital');
+
 Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], function () {
    Route::post('signUp','DoctorController@signUp');
    Route::post('signUpInfoEdit','DoctorController@signUpInfoEdit');
@@ -27,9 +30,6 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::post('configAward','DoctorController@configAward');
    Route::post('configJobTitle','DoctorController@configJobTitle');
    Route::post('userAwardList','DoctorController@userAwardList');
-
-   //test
-//   Route::any('testHospital','DoctorController@testHospital');
 });
 
 Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {

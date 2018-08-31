@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Doctor\HospitalListRequest;
 use App\Http\Requests\Doctor\SignUpInfoDetailRequest;
 use App\Http\Requests\Doctor\SignUpInfoEditRequest;
 use App\Http\Requests\Doctor\SignUpListRequest;
@@ -285,10 +286,12 @@ class DoctorController extends Controller
         }else{
             if (!isset($info['sms_code']) || $info['sms_code'] == ''){
                 //发送短信验证码
-                $res = SmsController::sendMessage($request, $info['phone_number']);
-                if ($res){
+                $res = SmsController::sendMessage($request, $info['phone_number'],'60');
+                if ($res === '200'){
                     $request->session()->put('sms_flag','true');
                     return Common::jsonFormat('200','短信验证码发送成功');
+                }elseif ($res === '500'){
+                    return Common::jsonFormat('500','短信验证码发送过于频繁');
                 }else{
                     return Common::jsonFormat('500','短信验证码发送失败');
                 }
@@ -339,15 +342,9 @@ class DoctorController extends Controller
 
                                 //把access_token 存入session
                                 $request->session()->put($user_token,$info['phone_number']);
-//                                $request->session()->save();
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha');
-
-                                $id = $request->session()->getId();
-                                $name = $request->session()->getName();
-
-                                Log::info('session_id:'.$id.$name);
 
                                 return Common::jsonFormat('200','登录成功',$user_token);
                             } catch (\Exception $e){
@@ -467,6 +464,14 @@ class DoctorController extends Controller
         return Common::jsonFormat('200','获取成功',$data);
     }
 
+    public function hospitalList(HospitalListRequest $request)
+    {
+        $info = $request->all();
+
+        $hospital = HospitalModel::where('district_id',$info['district_id'])->get(['id','name']);
+
+    }
+
     /**
      * @return array|string
      * 荣耀医生奖项配置
@@ -537,15 +542,30 @@ class DoctorController extends Controller
     {
         $info = $request->all();
 
-        if (!$info['district_name']){
-            return false;
-        }
+//        if (!$info['district_name']){
+//            return false;
+//        }
 
         try{
-            $tdistrict = DB::table('tdistrict')->where('district_name','like','%'.$info['district_name'].'%')->limit(100)->get();
+//            $tdistrict = DB::table('tdistrict')->where('district_name','like','%'.$info['district_name'].'%')->limit(100)->get();
+//
+//            $res = json_decode(json_encode($tdistrict,256),true);
 
-            $res = json_decode(json_encode($tdistrict,256),true);
+            /*$tt = DB::table('sheet1')->get();
+            $res = json_decode(json_encode($tt,256),true);
 
+
+
+            foreach ($res as $k => $v){
+                $hospital = new HospitalModel();
+                $hospital->name = $v['name'];
+                $hospital->district_id = $v['id'];
+                $address = DB::table('district')->find($v['id']);
+                $address = json_decode(json_encode($address,256),true);
+                $hospital->district_address = $address['mergershortname'];
+                $hospital->save();
+            }
+            */
 //            var_dump($res);die;
 
 
