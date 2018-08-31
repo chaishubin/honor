@@ -213,6 +213,16 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
+                    <h5>医院列表: <small class="link">/api/doctor/hospitalList</small></h5>
+                    <form role="form" action="/api/doctor/hospitalList">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon">district_id</span><input name="district_id" placeholder="地区id" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>奖项配置: <small class="link">/api/doctor/configAward</small></h5>
                     <form role="form" action="/api/doctor/configAward">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />

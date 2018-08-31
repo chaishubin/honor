@@ -464,12 +464,18 @@ class DoctorController extends Controller
         return Common::jsonFormat('200','获取成功',$data);
     }
 
+    /**
+     * @param HospitalListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 医院列表
+     */
     public function hospitalList(HospitalListRequest $request)
     {
         $info = $request->all();
 
         $hospital = HospitalModel::where('district_id',$info['district_id'])->get(['id','name']);
 
+        return Common::jsonFormat('200','获取成功',$hospital);
     }
 
     /**

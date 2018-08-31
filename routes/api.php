@@ -30,6 +30,7 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::post('configAward','DoctorController@configAward');
    Route::post('configJobTitle','DoctorController@configJobTitle');
    Route::post('userAwardList','DoctorController@userAwardList');
+   Route::post('hospitalList','DoctorController@hospitalList');
 });
 
 Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
