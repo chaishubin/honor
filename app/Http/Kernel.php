@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
             'bindings',
         ],
         'session' => [
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
 //            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
