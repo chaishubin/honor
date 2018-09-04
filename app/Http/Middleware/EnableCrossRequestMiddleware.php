@@ -16,26 +16,34 @@ class EnableCrossRequestMiddleware
      */
     public function handle($request, Closure $next)
     {
+//        $response = $next($request);
+//        $origin = $request->server('HTTP_ORIGIN') ? $request->server('HTTP_ORIGIN') : '';
+//        Log::info('ss'.$origin);
+//        $allow_origin = [
+//            'http://localhost:8080',
+//            'http://ceshih5.honour.huobanys.cn'
+//        ];
+//        if (in_array($origin, $allow_origin)) {
+//            try{
+//                $response->header('Access-Control-Allow-Origin', $origin);
+//                $response->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN');
+//                $response->header('Access-Control-Expose-Headers', 'Authorization, authenticated');
+//                $response->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, OPTIONS');
+//                $response->header('Access-Control-Allow-Credentials', 'true');
+//            } catch (\Exception $e){
+//                Log::info($e);
+//            }
+//
+//        }
+//
+//        return $next($request);
+
         $response = $next($request);
-        $origin = $request->server('HTTP_ORIGIN') ? $request->server('HTTP_ORIGIN') : '';
-        Log::info('ss'.$origin);
-        $allow_origin = [
-            'http://localhost:8080',
-            'http://ceshih5.honour.huobanys.cn'
-        ];
-        if (in_array($origin, $allow_origin)) {
-            try{
-                $response->header('Access-Control-Allow-Origin', $origin);
-                $response->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Cookie, X-CSRF-TOKEN, Accept, Authorization, X-XSRF-TOKEN');
-                $response->header('Access-Control-Expose-Headers', 'Authorization, authenticated');
-                $response->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, OPTIONS');
-                $response->header('Access-Control-Allow-Credentials', 'true');
-            } catch (\Exception $e){
-                Log::info($e);
-            }
+        $response->header('Access-Control-Allow-Origin','http://ceshih5.honour.huobanys.cn');
+        $response->header('Access-Control-Allow-Headers', 'Origin, Content-Type, Cookie, Accept');
+        $response->header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, OPTIONS');
+        $response->header('Access-Control-Allow-Credentials', 'true');
+        return $response;
 
-        }
-
-        return $next($request);
     }
 }
