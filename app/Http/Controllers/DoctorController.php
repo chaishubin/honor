@@ -282,7 +282,7 @@ class DoctorController extends Controller
 
 
         if ($session_captcha != $info['pic_code']){
-            return Common::jsonFormat('500','请输入正确的验证码哟');
+            return Common::jsonFormat('500','请输入正确的图形验证码哟');
         }else{
             if (!isset($info['sms_code']) || $info['sms_code'] == ''){
                 //发送短信验证码
@@ -366,7 +366,7 @@ class DoctorController extends Controller
                     //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                     $request->session()->forget('captcha');
 
-                    return Common::jsonFormat('500','请先获取验证码');
+                    return Common::jsonFormat('500','请先点击获取');
                 }
             }
         }
