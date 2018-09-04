@@ -22,6 +22,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], function () {
    Route::post('signUp','DoctorController@signUp');
+   Route::post('teamSignUp','DoctorController@teamSignUp');
    Route::post('signUpInfoEdit','DoctorController@signUpInfoEdit');
    Route::post('signUpInfoDetail','DoctorController@signUpInfoDetail');
    Route::post('signUpList','DoctorController@signUpList');
@@ -36,6 +37,7 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
 Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
     Route::post('showCaptcha','Common@showCaptcha');
     Route::post('userLogin','DoctorController@userLogin');
+    Route::post('testSetCookie','DoctorController@testSetCookie');
 });
 
 Route::group(['middleware' => ['session'], 'prefix' => '/manager'], function () {

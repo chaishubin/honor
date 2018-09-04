@@ -7,6 +7,7 @@ use App\Http\Requests\Doctor\SignUpInfoDetailRequest;
 use App\Http\Requests\Doctor\SignUpInfoEditRequest;
 use App\Http\Requests\Doctor\SignUpListRequest;
 use App\Http\Requests\Doctor\SignUpRequest;
+use App\Http\Requests\Doctor\TeamSignUpRequest;
 use App\Http\Requests\Doctor\UserAwardListRequest;
 use App\Http\Requests\Doctor\UserLoginRequest;
 use App\Http\Requests\Manager\SignUpInfoReviewListRequest;
@@ -90,7 +91,9 @@ class DoctorController extends Controller
         $info = $request->all();
 
         try{
-            $check = DoctorModel::where('phone_number',$info['phone_number'])->first();
+            $user_token = $request->cookie('user_token');
+            $phone_number = $request->session()->get($user_token);
+            $check = DoctorModel::where(['phone_number' => $phone_number, 'wanted_award' => $info['wanted_award']])->first();
             if ($check){
                 return Common::jsonFormat('500','此用户已参加报名');
             }
@@ -105,8 +108,49 @@ class DoctorController extends Controller
             $doctor->hospital_name = $info['hospital_name'];
             $doctor->department = $info['department'];
             $doctor->job_title = $info['job_title'];
-            $doctor->phone_number = $info['phone_number'];
+            $doctor->phone_number = $phone_number;
             $doctor->medical_certificate_no = $info['medical_certificate_no'];
+            $doctor->email = $info['email'];
+            $doctor->full_face_photo = $info['full_face_photo'];
+
+            $doctor->doctor_other_info = json_encode($info['doctor_other_info']);
+
+            $doctor->status = 1; //初始，待审核状态-----1待审核，2已通过，3未通过
+            $doctor->save();
+
+            return Common::jsonFormat('200','报名成功');
+
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','报名失败');
+        }
+    }
+
+    /**
+     * @param TeamSignUpRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 荣耀医者 团体奖 报名注册
+     */
+    public function teamSignUp(TeamSignUpRequest $request)
+    {
+        $info = $request->all();
+
+        try{
+            $user_token = $request->cookie('user_token');
+            $phone_number = $request->session()->get($user_token);
+            $check = DoctorModel::where(['phone_number' => $phone_number, 'wanted_award' => $info['wanted_award']])->first();
+            if ($check){
+                return Common::jsonFormat('500','您已报名该奖项了');
+            }
+
+            $doctor = new DoctorModel();
+            $doctor->name = $info['name'];
+            $doctor->sex = 127; //如果性别等于127，表示这是团体奖 报名者，
+            $doctor->wanted_award = $info['wanted_award'];
+            $doctor->hospital_id = $info['hospital_id'];
+            $doctor->hospital_name = $info['hospital_name'];
+            $doctor->department = $info['department'];
+            $doctor->phone_number = $phone_number;
             $doctor->email = $info['email'];
             $doctor->full_face_photo = $info['full_face_photo'];
 
@@ -374,30 +418,21 @@ class DoctorController extends Controller
 
 
     /**
-     * @param UserAwardListRequest $request
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * 用户退出登录
      */
-    public function userLogout(UserAwardListRequest $request)
+    public function userLogout(Request $request)
     {
-        $info = $request->all();
-
-        $check = UserModel::where('phone_number',$info['phone_number'])->first();
-        $session_token = $request->session()->get($check['access_token']);
-
-        if (!$check || $check['access_token'] != $info['user_token'] || $session_token != $check['phone_number']){
-            return Common::jsonFormat('500','用户信息不正确');
-        }
-
-
+        $user_token = $request->cookie('user_toklen');
         try{
-            $user = $check;
+            $user = UserModel::where('access_token',$user_token)->first();
             //把用户的user_token清空
             $user->access_token = '';
             $user->save();
 
             //清空session中的 user_token , sms_flag , sms_code
-            $request->session()->forget([$check['access_token'],'sms_flag','sms_code']);
+            $request->session()->forget([$user_token,'sms_flag','sms_code']);
 
             return Common::jsonFormat('200','退出成功');
         } catch (\Exception $e){
@@ -542,6 +577,17 @@ class DoctorController extends Controller
         }
 
         return $info;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 测试环境 设置cookie
+     * 为了登陆后启用其他接口使用
+     */
+    public function testSetCookie(Request $request)
+    {
+        return response('cookie设置成功')->cookie('user_token',$request['user_token']);
     }
 
     public function testHospital(Request $request)

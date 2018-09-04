@@ -64,6 +64,16 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
+                    <h5>测试环境设置cookie: <small class="link">/api/doctor/testSetCookie</small></h5>
+                    <form role="form" action="/api/doctor/testSetCookie">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>user_token</span><input name="user_token" placeholder="user_token,从用户登录接口获取" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>用户登录: <small class="link">/api/doctor/userLogin</small></h5>
                     <form role="form" action="/api/doctor/userLogin">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
@@ -124,10 +134,38 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon"><em>*</em>job_title</span><input name="job_title" placeholder="专业职称" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon"><em>*</em>phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
+                            <span class="input-group-addon"><em>*</em>medical_certificate_no</span><input name="medical_certificate_no" placeholder="医师资格证号" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon"><em>*</em>medical_certificate_no</span><input name="medical_certificate_no" placeholder="医师资格证号" value="" type="text" class="form-control">
+                            <span class="input-group-addon"><em>*</em>email</span><input name="email" placeholder="邮箱" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>full_face_photo</span><input name="full_face_photo" placeholder="免冠照片" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
+                    <h5>团体奖报名注册: <small class="link">/api/doctor/teamSignUp</small></h5>
+                    <form role="form" action="/api/doctor/teamSignUp">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>wanted_award</span><input name="wanted_award" placeholder="报名奖项" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>hospital_id</span><input name="hospital_id" placeholder="所属医院id" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>hospital_name</span><input name="hospital_name" placeholder="所属医院名称" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>department</span><input name="department" placeholder="所属科室" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><em>*</em>email</span><input name="email" placeholder="邮箱" value="" type="text" class="form-control">
@@ -174,9 +212,6 @@ h2{ margin:0; padding:25px 0; }
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">job_title</span><input name="job_title" placeholder="专业职称" value="" type="text" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">medical_certificate_no</span><input name="medical_certificate_no" placeholder="医师资格证号" value="" type="text" class="form-control">
