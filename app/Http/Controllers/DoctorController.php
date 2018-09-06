@@ -494,7 +494,7 @@ class DoctorController extends Controller
             }
         }
 
-        $data[] = ['registed'=>$registed,'registed_not'=>$registed_not];
+        $data = ['registed'=>$registed,'registed_not'=>$registed_not];
 
         return Common::jsonFormat('200','获取成功',$data);
     }
