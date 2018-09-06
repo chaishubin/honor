@@ -533,7 +533,6 @@ class DoctorController extends Controller
             ['id' => '110', 'name' => '专科精英奖-女性'],
             ['id' => '111', 'name' => '专科精英奖-口腔卫生'],
             ['id' => '112', 'name' => '专科精英奖-妇幼'],
-            ['id' => '113', 'name' => '最受老百姓欢迎医生奖']
         ];
 
         //根据id返回具体的name值
