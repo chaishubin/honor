@@ -39,7 +39,7 @@ class DoctorController extends Controller
             $signup_query->where('name',$info['name']);
         }
         if (isset($info['job_title']) && !is_null($info['job_title'])){
-            $signup_query->where('job_title',$info['job_title']);
+            $signup_query->where('job_title->first',$info['job_title']);
         }
         if (isset($info['hospital_name']) && !is_null($info['hospital_name'])){
             $signup_query->where('hospital_name','like','%'.$info['hospital_name'].'%');
@@ -59,7 +59,8 @@ class DoctorController extends Controller
         $sign_up = $signup_query->offset($offset)->limit($limit)->get();
 
         foreach ($sign_up as &$v){
-            $v['job_title'] = $this->configJobTitle($v['job_title']);
+            $job_title = json_decode($v['job_title'],true);
+            $v['job_title'] = $this->configJobTitle($job_title['first']).' '.$this->configJobTitle($job_title['second']);
             $v['wanted_award'] = $this->configAward($v['wanted_award']);
             $v['doctor_other_info'] = json_decode($v['doctor_other_info'],true);
         }

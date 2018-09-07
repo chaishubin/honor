@@ -23,7 +23,7 @@ class CreateDoctorTable extends Migration
             $table->integer('hospital_id')->comment('所属医院id');
             $table->string('hospital_name',100)->comment('所属医院名称');
             $table->string('department',100)->comment('所属科室');
-            $table->integer('job_title')->nullable()->comment('专业职称');
+            $table->json('job_title')->nullable()->comment('专业职称');
             $table->string('phone_number',100)->comment('手机号');
             $table->string('medical_certificate_no',50)->nullable()->comment('医师资格证号');
             $table->string('email',100)->comment('邮箱');

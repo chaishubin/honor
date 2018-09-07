@@ -32,7 +32,7 @@ class SignUpRequest extends FormRequest
             'hospital_id' => 'required|numeric',
             'hospital_name' => 'required',
             'department' => 'required|max:100',
-            'job_title' => 'required|numeric',
+            'job_title' => 'required|json',
             'medical_certificate_no' => 'required|max:50',
             'email' => 'required|max:100',
             'full_face_photo' => 'required',
