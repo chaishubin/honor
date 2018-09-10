@@ -33,12 +33,12 @@ class SignUpInfoEditRequest extends FormRequest
             'hospital_id' => 'nullable|numeric',
             'hospital_name' => 'nullable',
             'department' => 'nullable|max:100',
-            'job_title' => 'nullable|numeric',
+            'job_title' => 'nullable|numeric|json',
             'phone_number' => 'nullable|numeric',
             'medical_certificate_no' => 'nullable|max:50',
             'email' => 'nullable|max:100',
             'full_face_photo' => 'nullable',
-            'doctor_other_info' => 'nullable',
+            'doctor_other_info' => 'nullable|json',
         ];
     }
 }

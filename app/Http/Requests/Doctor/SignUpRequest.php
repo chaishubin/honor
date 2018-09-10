@@ -36,7 +36,7 @@ class SignUpRequest extends FormRequest
             'medical_certificate_no' => 'required|max:50',
             'email' => 'required|max:100',
             'full_face_photo' => 'required',
-            'doctor_other_info' => 'nullable',
+            'doctor_other_info' => 'nullable|json',
         ];
     }
 }

@@ -113,8 +113,7 @@ class DoctorController extends Controller
             $doctor->medical_certificate_no = $info['medical_certificate_no'];
             $doctor->email = $info['email'];
             $doctor->full_face_photo = $info['full_face_photo'];
-
-            $doctor->doctor_other_info = json_encode($info['doctor_other_info']);
+            $doctor->doctor_other_info = $info['doctor_other_info'];
 
             $doctor->status = 1; //初始，待审核状态-----1待审核，2已通过，3未通过
             $doctor->save();
@@ -154,8 +153,7 @@ class DoctorController extends Controller
             $doctor->phone_number = $phone_number;
             $doctor->email = $info['email'];
             $doctor->full_face_photo = $info['full_face_photo'];
-
-            $doctor->doctor_other_info = json_encode($info['doctor_other_info']);
+            $doctor->doctor_other_info = $info['doctor_other_info'];
 
             $doctor->status = 1; //初始，待审核状态-----1待审核，2已通过，3未通过
             $doctor->save();
@@ -230,7 +228,8 @@ class DoctorController extends Controller
             }
 
             if (!is_null($info['doctor_other_info'])){
-                foreach ($info['doctor_other_info'] as $k => $v){
+                $doctor_other_info = json_decode($info['doctor_other_info'],true);
+                foreach ($doctor_other_info as $k => $v){
                     //如果传入的字段与记录中json中的字段不符，报错终止执行
                     if (!isset($sign_up->doctor_other_info->$k)){
                         return Common::jsonFormat('500','服务器内部错误');

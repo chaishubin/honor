@@ -31,7 +31,7 @@ class TeamSignUpRequest extends FormRequest
             'department' => 'required|max:100',
             'email' => 'required|max:100',
             'full_face_photo' => 'required',
-            'doctor_other_info' => 'nullable',
+            'doctor_other_info' => 'nullable|json',
         ];
     }
 }
