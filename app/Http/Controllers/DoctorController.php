@@ -252,7 +252,7 @@ class DoctorController extends Controller
     /**
      * @param SignUpInfoDetailRequest $request
      * @return \Illuminate\Http\JsonResponse
-     * 荣耀医者 报名信息详情
+     * 荣耀医者 PC报名信息详情
      */
     public function signUpInfoDetail(SignUpInfoDetailRequest $request)
     {
@@ -267,6 +267,34 @@ class DoctorController extends Controller
         $data['doctor_other_info'] = json_decode($data['doctor_other_info'],true);
 
         return Common::jsonFormat('200','获取成功',$check);
+    }
+
+    /**
+     * @param SignUpInfoDetailRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 用户报名信息详情
+     */
+    public function userSignUpInfoDetail(SignUpInfoDetailRequest $request)
+    {
+        $info = $request->all();
+        $cookie_token = $request->cookie('user_token');
+        $phone_number = $request->session()->get($cookie_token);
+
+        $doctor = DoctorModel::where(['phone_number' => $phone_number, 'wanted_award' => $info['id']])->first();
+
+        if (!$doctor){
+            return Common::jsonFormat('500','此报名信息不存在哟');
+        }else{
+            $data = $doctor;
+            $data['sex'] = $doctor['sex'] ? '男' : '女';
+            $data['job_title'] = implode(' ', json_decode($doctor['job_title'],true));
+            $doctor_other_info = json_decode($doctor['doctor_other_info'],true);
+            foreach ($doctor_other_info as $k => $v){
+                $data['$k'] = $v;
+            }
+
+            return Common::jsonFormat('200','获取成功',$doctor);
+        }
     }
 
     /**
@@ -461,7 +489,7 @@ class DoctorController extends Controller
             return Common::jsonFormat('500','用户信息错误');
         }
 
-        $doctor = DoctorModel::where('phone_number',$user_phone_number['phone_number'])->get(['wanted_award']);
+        $doctor = DoctorModel::where('phone_number',$user_phone_number['phone_number'])->get();
         if (!$doctor){
             return Common::jsonFormat('500','奖项列表获取失败');
         }
@@ -474,8 +502,10 @@ class DoctorController extends Controller
             $all_ids[] = $v['id'];
         }
 
-        $registed = [];
+        $allow_register = [];
+        $allow_registed_not = [];
         $registed_not = $all;
+
         //遍历这个医生所有已报名的记录
         foreach ($doctor as &$v){
             //如果查到记录中奖项的id不在奖项配置文件列表的id中，则跳出循环
@@ -487,15 +517,20 @@ class DoctorController extends Controller
             //   匹配的话，就插入新的已报名数组中，并且从一个所有奖项的数组中剔除这条记录
             foreach ($all as $ak => $av){
                 if ($v['wanted_award'] == $av['id']){
-                    $registed[$ak]['id']=$av['id'];
-                    $registed[$ak]['name']=$av['name'];
+                    if ($v['status'] == 2){ //已通过,不允许修改
+                        $allow_registed_not[$ak]['id']=$av['id'];
+                        $allow_registed_not[$ak]['name']=$av['name'];
+                    }else{ //待审核、未通过，都允许修改
+                        $allow_register[$ak]['id']=$av['id'];
+                        $allow_register[$ak]['name']=$av['name'];
+                    }
 
                     unset($registed_not[$ak]);
                 }
             }
         }
 
-        $data = ['registed'=>$registed,'registed_not'=>$registed_not];
+        $data = ['registed_not'=>$registed_not, 'in_review'=>$allow_register, 'pass_review'=>$allow_registed_not];
 
         return Common::jsonFormat('200','获取成功',$data);
     }
