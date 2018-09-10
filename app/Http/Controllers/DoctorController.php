@@ -286,7 +286,18 @@ class DoctorController extends Controller
         }else{
             $data = $doctor;
             $data['sex'] = $doctor['sex'] ? '男' : '女';
-            $data['job_title'] = implode(' ', json_decode($doctor['job_title'],true));
+
+            $job_title = json_decode($doctor['job_title'],true);
+            if ($job_title){
+                $j_res = [];
+                foreach ($job_title as $k => $v){
+                    $j_res[$k]['id'] = $v;
+                    $j_res[$k]['name'] = $this->configJobTitle($v);
+                }
+                $data['job_title'] = $j_res;
+            }
+
+
             $doctor_other_info = json_decode($doctor['doctor_other_info'],true);
             if ($doctor_other_info){
                 $res = [];
