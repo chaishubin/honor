@@ -475,7 +475,7 @@ class DoctorController extends Controller
 
     /**
      * @return \Illuminate\Http\JsonResponse|string
-     * 用户已报名、未报名奖项列表
+     * 用户未报名、审核中、已通过奖项列表
      */
     public function userAwardList(Request $request)
     {

@@ -180,6 +180,16 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
+                    <h5>报名信息详情: <small class="link">/api/doctor/userSignUpInfoDetail</small></h5>
+                    <form role="form" action="/api/doctor/userSignUpInfoDetail">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="奖项id" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>报名信息修改: <small class="link">/api/doctor/signUpInfoEdit</small></h5>
                     <form role="form" action="/api/doctor/signUpInfoEdit">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
@@ -241,7 +251,7 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
-                    <h5>已报名、未报名奖项列表: <small class="link">/api/doctor/userAwardList</small></h5>
+                    <h5>未报名、审核中、已通过奖项列表: <small class="link">/api/doctor/userAwardList</small></h5>
                     <form role="form" action="/api/doctor/userAwardList">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                         <button type="submit" class="btn btn-primary">Submit</button>

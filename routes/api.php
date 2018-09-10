@@ -25,6 +25,7 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::post('teamSignUp','DoctorController@teamSignUp');
    Route::post('signUpInfoEdit','DoctorController@signUpInfoEdit');
    Route::post('signUpInfoDetail','DoctorController@signUpInfoDetail');
+   Route::post('userSignUpInfoDetail','DoctorController@userSignUpInfoDetail');
    Route::post('signUpList','DoctorController@signUpList');
    Route::post('userLogout','ManagerController@userLogout');
 
