@@ -187,7 +187,7 @@ class DoctorController extends Controller
             }
             $sign_up = $check;
 
-            if ($info['name']){
+            if (isset($info['name'])){
                 $sign_up->name = $info['name'];
             }
             if (isset($info['sex']) && !is_null($info['sex'])){
@@ -205,25 +205,25 @@ class DoctorController extends Controller
             if (isset($info['sex']) && !is_null($info['hospital_id'])){
                 $sign_up->hospital_id = $info['hospital_id'];
             }
-            if ($info['hospital_name']){
+            if (isset($info['hospital_name'])){
                 $sign_up->hospital_name = $info['hospital_name'];
             }
-            if ($info['department']){
+            if (isset($info['department'])){
                 $sign_up->department = $info['department'];
             }
-            if ($info['job_title']){
+            if (isset($info['job_title'])){
                 $sign_up->job_title = $info['job_title'];
             }
-            if ($info['phone_number']){
+            if (isset($info['phone_number'])){
                 $sign_up->phone_number = $info['phone_number'];
             }
-            if ($info['medical_certificate_no']){
+            if (isset($info['medical_certificate_no'])){
                 $sign_up->medical_certificate_no = $info['medical_certificate_no'];
             }
-            if ($info['email']){
+            if (isset($info['email'])){
                 $sign_up->email = $info['email'];
             }
-            if ($info['full_face_photo']){
+            if (isset($info['full_face_photo'])){
                 $sign_up->full_face_photo = $info['full_face_photo'];
             }
 
