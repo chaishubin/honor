@@ -17,7 +17,6 @@ class EnableCrossRequestMiddleware
     public function handle($request, Closure $next)
     {
         $origin = $request->server('HTTP_ORIGIN') ? $request->server('HTTP_ORIGIN') : '';
-        Log::info('ss'.$origin);
 
         $response = $next($request);
         $allow_origin = [
