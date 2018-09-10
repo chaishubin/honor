@@ -190,19 +190,19 @@ class DoctorController extends Controller
             if ($info['name']){
                 $sign_up->name = $info['name'];
             }
-            if (!is_null($info['sex'])){
+            if (isset($info['sex']) && !is_null($info['sex'])){
                 $sign_up->sex = $info['sex'];
             }
-            if (!is_null($info['age'])){
+            if (isset($info['sex']) && !is_null($info['age'])){
                 $sign_up->age = $info['age'];
             }
             if ($info['wanted_award']){
                 $sign_up->wanted_award = $info['wanted_award'];
             }
-            if (!is_null($info['working_year'])){
+            if (isset($info['sex']) && !is_null($info['working_year'])){
                 $sign_up->working_year = $info['working_year'];
             }
-            if (!is_null($info['hospital_id'])){
+            if (isset($info['sex']) && !is_null($info['hospital_id'])){
                 $sign_up->hospital_id = $info['hospital_id'];
             }
             if ($info['hospital_name']){
@@ -227,7 +227,7 @@ class DoctorController extends Controller
                 $sign_up->full_face_photo = $info['full_face_photo'];
             }
 
-            if (!is_null($info['doctor_other_info'])){
+            if (isset($info['sex']) && !is_null($info['doctor_other_info'])){
                 $doctor_other_info = json_decode($info['doctor_other_info'],true);
                 foreach ($doctor_other_info as $k => $v){
                     //如果传入的字段与记录中json中的字段不符，报错终止执行
@@ -296,7 +296,6 @@ class DoctorController extends Controller
                 }
                 $data['job_title'] = $j_res;
             }
-
 
             $doctor_other_info = json_decode($doctor['doctor_other_info'],true);
             if ($doctor_other_info){
