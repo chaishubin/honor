@@ -234,6 +234,7 @@ class DoctorController extends Controller
 //                    if (!isset($sign_up->doctor_other_info->$k)){
 //                        return Common::jsonFormat('500','服务器内部错误');
 //                    }
+                    Log::info($k.$v);
                     $sign_up->doctor_other_info->$k = $v;
                 }
             }
