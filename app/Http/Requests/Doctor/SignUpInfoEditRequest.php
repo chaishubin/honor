@@ -33,7 +33,7 @@ class SignUpInfoEditRequest extends FormRequest
             'hospital_id' => 'nullable|numeric',
             'hospital_name' => 'nullable',
             'department' => 'nullable|max:100',
-            'job_title' => 'nullable|numeric|json',
+            'job_title' => 'nullable|json',
             'phone_number' => 'nullable|numeric',
             'medical_certificate_no' => 'nullable|max:50',
             'email' => 'nullable|max:100',
