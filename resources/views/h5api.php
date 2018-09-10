@@ -233,19 +233,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon">full_face_photo</span><input name="full_face_photo" placeholder="免冠照片" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon">working_experience</span><input name="working_experience" placeholder="工作经历" value="" type="text" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">doctor_patient_story</span><input name="doctor_patient_story" placeholder="医患故事" value="" type="text" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">typical_excellent_deeds</span><input name="typical_excellent_deeds" placeholder="典型优秀事迹" value="" type="text" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">science_popularization</span><input name="science_popularization" placeholder="科普工作" value="" type="text" class="form-control">
-                        </div>
-                        <div class="input-group">
-                            <span class="input-group-addon">hornor</span><input name="hornor" placeholder="个人荣誉" value="" type="text" class="form-control">
+                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等" value="" type="text" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
