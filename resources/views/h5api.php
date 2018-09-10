@@ -110,7 +110,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon"><em>*</em>name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon"><em>*</em>sex</span><input name="sex" placeholder="性别" value="" type="text" class="form-control">
+                            <span class="input-group-addon"><em>*</em>sex</span><input name="sex" placeholder="性别，男1，女0" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><em>*</em>age</span><input name="age" placeholder="年龄" value="" type="text" class="form-control">
@@ -131,7 +131,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon"><em>*</em>department</span><input name="department" placeholder="所属科室" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon"><em>*</em>job_title</span><input name="job_title" placeholder="专业职称" value="" type="text" class="form-control">
+                            <span class="input-group-addon"><em>*</em>job_title</span><input name="job_title" placeholder="专业职称（格式为标准json）" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><em>*</em>medical_certificate_no</span><input name="medical_certificate_no" placeholder="医师资格证号" value="" type="text" class="form-control">
@@ -143,7 +143,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon"><em>*</em>full_face_photo</span><input name="full_face_photo" placeholder="免冠照片" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等" value="" type="text" class="form-control">
+                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等（格式为标准json）" value="" type="text" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
@@ -200,7 +200,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon">name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon">sex</span><input name="sex" placeholder="性别" value="" type="text" class="form-control">
+                            <span class="input-group-addon">sex</span><input name="sex" placeholder="性别，男1，女0" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">age</span><input name="age" placeholder="年龄" value="" type="text" class="form-control">
@@ -221,7 +221,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon">department</span><input name="department" placeholder="所属科室" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon">job_title</span><input name="job_title" placeholder="专业职称" value="" type="text" class="form-control">
+                            <span class="input-group-addon">job_title</span><input name="job_title" placeholder="专业职称（格式为标准json）" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon">medical_certificate_no</span><input name="medical_certificate_no" placeholder="医师资格证号" value="" type="text" class="form-control">
@@ -233,7 +233,7 @@ h2{ margin:0; padding:25px 0; }
                             <span class="input-group-addon">full_face_photo</span><input name="full_face_photo" placeholder="免冠照片" value="" type="text" class="form-control">
                         </div>
                         <div class="input-group">
-                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等" value="" type="text" class="form-control">
+                            <span class="input-group-addon">doctor_other_info</span><input name="doctor_other_info" placeholder="报名医生其他详细信息，比如医患故事、个人荣誉等等（格式为标准json）" value="" type="text" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
