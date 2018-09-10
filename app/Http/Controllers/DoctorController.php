@@ -230,10 +230,10 @@ class DoctorController extends Controller
             if (isset($info['doctor_other_info']) && !is_null($info['doctor_other_info'])){
                 $doctor_other_info = json_decode($info['doctor_other_info'],true);
                 foreach ($doctor_other_info as $k => $v){
-                    //如果传入的字段与记录中json中的字段不符，报错终止执行
-                    if (!isset($sign_up->doctor_other_info->$k)){
-                        return Common::jsonFormat('500','服务器内部错误');
-                    }
+//                    //如果传入的字段与记录中json中的字段不符，报错终止执行
+//                    if (!isset($sign_up->doctor_other_info->$k)){
+//                        return Common::jsonFormat('500','服务器内部错误');
+//                    }
                     $sign_up->doctor_other_info->$k = $v;
                 }
             }
