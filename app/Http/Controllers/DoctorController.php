@@ -289,13 +289,14 @@ class DoctorController extends Controller
             $data['job_title'] = implode(' ', json_decode($doctor['job_title'],true));
             $doctor_other_info = json_decode($doctor['doctor_other_info'],true);
             if ($doctor_other_info){
+                $res = [];
                 foreach ($doctor_other_info as $k => $v){
-                    $data[$k] = $v;
+                    $res[$k] = $v;
                 }
-                unset($data['doctor_other_info']);
+                $data['doctor_other_info'] = $res;
             }
 
-            return Common::jsonFormat('200','获取成功',$doctor);
+            return Common::jsonFormat('200','获取成功',$data);
         }
     }
 
