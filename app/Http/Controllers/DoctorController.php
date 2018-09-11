@@ -407,10 +407,11 @@ class DoctorController extends Controller
                                 //把access_token 存入session
                                 $request->session()->put($user_token,$info['phone_number']);
 
-                                $id = $request->session()->getId();
-                                $name = $request->session()->getName();
+                                //存储user_token
+                                $request->session()->put('user_token',$user_token);
 
-                                Log::info('session_id:'.$id.$name);
+                                //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
+                                $request->session()->forget('captcha');
 
                                 return Common::jsonFormat('200','注册成功',$user_token);
                             } catch (\Exception $e){
@@ -429,6 +430,9 @@ class DoctorController extends Controller
 
                                 //把access_token 存入session
                                 $request->session()->put($user_token,$info['phone_number']);
+
+                                //存储user_token
+                                $request->session()->put('user_token',$user_token);
 
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha');
