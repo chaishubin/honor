@@ -368,7 +368,7 @@ class DoctorController extends Controller
         }
 
 
-        if ($session_captcha != $info['pic_code']){
+        if ($session_captcha != strtolower($info['pic_code'])){
             return Common::jsonFormat('500','请输入正确的图形验证码哟');
         }else{
             if (!isset($info['sms_code']) || $info['sms_code'] == ''){
