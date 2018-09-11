@@ -471,7 +471,7 @@ class DoctorController extends Controller
      */
     public function userLogout(Request $request)
     {
-        $user_token = $request->cookie('user_toklen');
+        $user_token = $request->cookie('user_token');
         try{
             $user = UserModel::where('access_token',$user_token)->first();
             //把用户的user_token清空
@@ -647,14 +647,14 @@ class DoctorController extends Controller
     {
         $info = $request->all();
 
-//        if (!$info['district_name']){
-//            return false;
-//        }
+        if (!$info['district_name']){
+            return false;
+        }
 
         try{
-//            $tdistrict = DB::table('tdistrict')->where('district_name','like','%'.$info['district_name'].'%')->limit(100)->get();
-//
-//            $res = json_decode(json_encode($tdistrict,256),true);
+            $tdistrict = DB::table('tdistrict')->where('district_name','like','%'.$info['district_name'].'%')->limit(100)->get();
+
+            $res = json_decode(json_encode($tdistrict,256),true);
 
             /*$tt = DB::table('sheet1')->get();
             $res = json_decode(json_encode($tt,256),true);
