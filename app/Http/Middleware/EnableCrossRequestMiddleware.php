@@ -21,7 +21,9 @@ class EnableCrossRequestMiddleware
         $response = $next($request);
         $allow_origin = [
             'http://localhost:8080',
-            'http://ceshih5.honour.huobanys.cn'
+            'http://ceshih5.honour.huobanys.cn',
+            'http://192.168.1.*',
+            'http://127.0.0.1:8016'
         ];
         if (in_array($origin, $allow_origin)) {
             $response->header('Access-Control-Allow-Origin',$origin);

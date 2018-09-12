@@ -92,7 +92,7 @@
                      var district = $("#district").val();
 
                     $.ajax({
-                        url:"http://192.168.1.161:8016/api/doctor/testHospital",
+                        url:"http://192.168.1.161:8016/api/testHospital",
                         type:"post",
                         data:{
                             "district_name":district
@@ -105,7 +105,7 @@
                             if (result){
                                 str = `<tr><th>地区名称</th><th>地区名称</th><th>地区编号</th></tr>`
                                 result.forEach(function (item) {
-                                    str += `<tr><td>${item.district_name}</td><td>${item.district_mergershortname}</td><td>${item.district_id}</td></tr>`
+                                    str += `<tr><td>${item.name}</td><td>${item.mergershortname}</td><td>${item.id}</td></tr>`
                                 })
                                 $("#title").html(str)
                             }

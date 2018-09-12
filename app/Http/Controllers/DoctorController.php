@@ -647,12 +647,12 @@ class DoctorController extends Controller
     {
         $info = $request->all();
 
-        if (!$info['district_name']){
-            return false;
-        }
+//        if (!$info['district_name']){
+//            return false;
+//        }
 
         try{
-            $tdistrict = DB::table('tdistrict')->where('district_name','like','%'.$info['district_name'].'%')->limit(100)->get();
+            $tdistrict = DB::table('district')->where('name','like','%'.$info['district_name'].'%')->limit(100)->get();
 
             $res = json_decode(json_encode($tdistrict,256),true);
 
