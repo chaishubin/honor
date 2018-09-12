@@ -215,12 +215,14 @@ class ManagerController extends Controller
         $start_time = strtotime($data['sign_up_time']['start']);
         $end_time = strtotime($data['sign_up_time']['end']);
         $cur_time = time();
-        if ($cur_time > $start_time && $cur_time < $end_time){
+        if ($cur_time >= $start_time && $cur_time < $end_time){
             $data['can_sign_up'] = 1;
+        }elseif ($cur_time < $start_time){
+            $data['can_sign_up'] = 2;
         }else{
-            $data['can_sign_up'] = 0;
+            $data['can_sign_up'] = 3;
         }
-        
+
         return Common::jsonFormat('200','获取成功',$data);
 
     }
