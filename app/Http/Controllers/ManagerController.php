@@ -7,7 +7,9 @@ use App\Http\Requests\Manager\ManagerDeleteRequest;
 use App\Http\Requests\Manager\ManagerListRequest;
 use App\Http\Requests\Manager\ManagerLoginRequest;
 use App\Http\Requests\Manager\ManagerLogoutRequest;
+use App\Http\Requests\Manager\TimeSettingRequest;
 use App\Models\Manager\ManagerModel;
+use App\Models\Manager\SettingModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -167,5 +169,50 @@ class ManagerController extends Controller
             Log::error($e);
             return Common::jsonFormat('500','退出失败');
         }
+    }
+
+    /**
+     * @param TimeSettingRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 后台时间限制相关设置
+     */
+    public function timeSetting(TimeSettingRequest $request)
+    {
+        $info = $request->all();
+
+        try{
+            $setting = SettingModel::where('name','time_limit')->first();
+
+            if ($setting){ //如果查找到了，进行更新操作
+                $setting->value = $info['time_limit'];
+                $setting->save();
+
+                return Common::jsonFormat('200','设置成功');
+            }else{ // 未查到，进行插入操作
+                $setting = new SettingModel();
+                $setting->name = 'time_limit';
+                $setting->value = $info['time_limit'];
+                $setting->save();
+
+                return Common::jsonFormat('200','设置成功');
+            }
+
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','设置失败');
+        }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 时间限制列表
+     */
+    public function timeSettingList(Request $request)
+    {
+        $setting = SettingModel::where('name','time_limit')->first();
+
+        return Common::jsonFormat('200','获取成功',json_decode($setting['value']));
+
     }
 }

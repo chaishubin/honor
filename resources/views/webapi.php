@@ -204,6 +204,33 @@
                         </form>
                     </div>
                 </li>
+                <li>
+                    <h3>参数设置</h3>
+                    <div class="item-doc">
+                        <h5>时间限制设置: <small class="link">/api/manager/timeSetting</small></h5>
+                        <form role="form" action="/api/manager/timeSetting">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon">time_limit</span><input name="time_limit" placeholder="[json格式]时间限制范围" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <pre>
+{
+"sign_up_time":
+{"start":"2018-09-12 09:00:00","end":"2018-09-12 09:00:00"},
+"review_time":
+{"start":"2018-09-12 09:00:00","end":"2018-09-12 09:00:00"},
+"vote_time":
+{"start":"2018-09-12 09:00:00","end":"2018-09-12 09:00:00"},
+"prize_giving_time":
+{"start":"2018-09-12 09:00:00","end":"2018-09-12 09:00:00"}
+}
+                                </pre>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </li>
 
             </ul>
         </div>

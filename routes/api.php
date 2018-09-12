@@ -63,6 +63,9 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('signUpList','DoctorController@signUpList');
     Route::post('signUpInfoReview','DoctorController@signUpInfoReview');
     Route::post('signUpInfoReviewList','DoctorController@signUpInfoReviewList');
+
+    Route::post('timeSetting','ManagerController@timeSetting');
 });
 
+Route::post('timeSettingList','ManagerController@timeSettingList');
 

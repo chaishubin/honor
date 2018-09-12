@@ -57,6 +57,13 @@ h2{ margin:0; padding:25px 0; }
             <li>
 	            <h3>荣耀医者</h3>
                 <div class="item-doc">
+                    <h5>时间限制列表: <small class="link">/api/timeSettingList</small></h5>
+                    <form role="form" action="/api/timeSettingList">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>图形验证码: <small class="link">/api/doctor/showCaptcha</small></h5>
                     <form role="form" action="/api/doctor/showCaptcha">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
