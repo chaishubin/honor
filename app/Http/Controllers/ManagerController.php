@@ -211,8 +211,10 @@ class ManagerController extends Controller
     public function timeSettingList(Request $request)
     {
         $setting = SettingModel::where('name','time_limit')->first();
+        $data = json_decode($setting['value'],true);
+        $data['current_time'] = date('Y-m-d H:i:s');
 
-        return Common::jsonFormat('200','获取成功',json_decode($setting['value']));
+        return Common::jsonFormat('200','获取成功',$data);
 
     }
 }
