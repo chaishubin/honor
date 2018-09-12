@@ -18,10 +18,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
     //test
-   Route::any('test-table',function(){
-       return view('test-table');
-   });
-   Route::any('testHospital','DoctorController@testHospital');
+//   Route::any('test-table',function(){
+//       return view('test-table');
+//   });
+//   Route::any('testHospital','DoctorController@testHospital');
 
 Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], function () {
    Route::post('signUp','DoctorController@signUp');

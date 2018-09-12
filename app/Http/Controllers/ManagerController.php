@@ -212,8 +212,15 @@ class ManagerController extends Controller
     {
         $setting = SettingModel::where('name','time_limit')->first();
         $data = json_decode($setting['value'],true);
-        $data['current_time'] = date('Y-m-d H:i:s');
-
+        $start_time = strtotime($data['sign_up_time']['start']);
+        $end_time = strtotime($data['sign_up_time']['end']);
+        $cur_time = time();
+        if ($cur_time > $start_time && $cur_time < $end_time){
+            $data['can_sign_up'] = 1;
+        }else{
+            $data['can_sign_up'] = 0;
+        }
+        
         return Common::jsonFormat('200','获取成功',$data);
 
     }
