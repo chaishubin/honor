@@ -25,9 +25,6 @@ class CheckUserIsLogin
             return Common::jsonFormat('500','server reject !');
         }
 
-        //存储user_token
-        $request->session()->put('user_token',$cookie_token);
-
         return $next($request);
     }
 }
