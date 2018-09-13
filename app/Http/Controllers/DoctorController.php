@@ -479,7 +479,7 @@ class DoctorController extends Controller
             $user->save();
 
             //清空session中的 user_token , sms_flag , sms_code
-            $request->session()->forget([$user_token,'sms_flag','sms_code']);
+            $request->session()->forget([$user_token,'sms_flag','sms_code','user_token']);
 
             return Common::jsonFormat('200','退出成功');
         } catch (\Exception $e){
