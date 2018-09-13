@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Http\Controllers\Common;
+use App\Models\DoctorSignUp\UserModel;
 use Closure;
 use Illuminate\Support\Facades\Log;
 
@@ -23,6 +24,12 @@ class CheckUserIsLogin
         if (!$cookie_token || !$session_token){
             Log::info('用户尝试非法登录，其尝试的user_token是：'.$cookie_token);
             return Common::jsonFormat('500','server reject !');
+        }
+
+        $user = UserModel::where('access_token',$cookie_token)->first();
+        //如果没根据 user_token 查到用户登陆信息，说明用户可能在其他端登录了，此时要清空cookie，让其重新登陆
+        if (!$user){
+            return response('该账号已在其他端登录，请重新登录')->cookie('user_token','');
         }
 
         return $next($request);
