@@ -130,8 +130,8 @@ class ManagerController extends Controller
             //存入session
             $request->session()->put($manager_token,'manager_token'.$manager['id']);
 
-//            return response('manager')->cookie('manager_token',$manager_token,10);
-            return Common::jsonFormat('200','登录成功');
+            $data = $manager_token;
+            return Common::jsonFormat('200','登录成功',$data);
         } catch (\Exception $e){
             Log::error($e);
             return Common::jsonFormat('500','登录失败');
@@ -224,6 +224,16 @@ class ManagerController extends Controller
         }
 
         return Common::jsonFormat('200','获取成功',$data);
+    }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 测试环境 设置cookie
+     * 为了登陆后启用其他接口使用
+     */
+    public function testSetCookie(Request $request)
+    {
+        return response('cookie设置成功')->cookie('manager_token',$request['manager_token']);
     }
 }

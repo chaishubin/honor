@@ -62,7 +62,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\CheckManagerIsLogin::class,
         ],
         'checkManagerRoleLogin' => [
-            \App\Http\Middleware\EncryptCookies::class,
+//            \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\CheckSuperManagerRole::class,

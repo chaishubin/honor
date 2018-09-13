@@ -46,6 +46,7 @@ Route::group(['middleware' => ['session'], 'prefix' => '/doctor'], function () {
 
 Route::group(['middleware' => ['session'], 'prefix' => '/manager'], function () {
     Route::post('managerLogin','ManagerController@managerLogin');
+    Route::post('testSetCookie','ManagerController@testSetCookie');
 });
 
 Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], function () {

@@ -57,6 +57,16 @@
                 <li>
                     <h3>荣耀医者</h3>
                     <div class="item-doc">
+                        <h5>测试环境设置cookie: <small class="link">/api/manager/testSetCookie</small></h5>
+                        <form role="form" action="/api/manager/testSetCookie">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>manager_token</span><input name="manager_token" placeholder="manager_token,从用户登录接口获取" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
                         <h5>报名信息列表: <small class="link">/api/manager/signUpList</small></h5>
                         <form role="form" action="/api/manager/signUpList">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
