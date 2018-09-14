@@ -240,11 +240,11 @@ class Common
         $production = '/\.com$/';
 
         if (preg_match($local,$host)){
-            return $host;
+            return 'local';
         }elseif (preg_match($test,$host)){
-            return 'https://ceshi.huobanys.cn';
+            return 'testing';
         }elseif (preg_match($production,$host)){
-            return 'https://mainapi.huobanys.com';
+            return 'production';
         }else{
             return '';
         }

@@ -17,18 +17,30 @@ Route::get('/', function () {
 
 //接口文档路由
 Route::get('/webapi', function () {
-    return view('webapi');
+    $host = \App\Http\Controllers\Common::environmentUrl();
+    if ($host != 'production'){
+        return view('webapi');
+    }else{
+        return view('welcome');
+    }
 });
 
 //H5 接口文档路由
 Route::get('/h5api', function () {
-    return view('h5api');
+    $host = \App\Http\Controllers\Common::environmentUrl();
+    if ($host != 'production'){
+        return view('h5api');
+    }else{
+        return view('welcome');
+    }
 });
 
 Route::get('/testhospital', function () {
-    return view('test-table');
+    $host = \App\Http\Controllers\Common::environmentUrl();
+    if ($host != 'production'){
+        return view('test-table');
+    }else{
+        return view('welcome');
+    }
 });
-
-
-Route::any('/sendMessage','SmsController@sendMessage');
 
