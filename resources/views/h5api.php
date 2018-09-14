@@ -55,7 +55,7 @@ h2{ margin:0; padding:25px 0; }
                 </div>
             </li>
             <li>
-	            <h3>荣耀医者ss</h3>
+	            <h3>荣耀医者sfs</h3>
                 <div class="item-doc">
                     <h5>时间限制列表: <small class="link">/api/timeSettingList</small></h5>
                     <form role="form" action="/api/timeSettingList">
