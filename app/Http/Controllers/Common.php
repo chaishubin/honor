@@ -269,4 +269,21 @@ class Common
         return $builder->inline();
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Config\Repository|mixed
+     * 获取微信公众号配置（绿通微信）----只允许正式域名且为手机设备
+     */
+    public function getWechatConfig(Request $request)
+    {
+        $url = $request->url();
+        $userAgent = $request->userAgent();
+
+        $url_match = '/rongyao2018.huobanys.com/';
+        $agent_match = '/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/';
+        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)){
+            return config('wechat');
+        }
+    }
+
 }
