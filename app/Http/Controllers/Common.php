@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Gregwar\Captcha\CaptchaBuilder;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class Common
@@ -287,20 +288,25 @@ class Common
 //        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
         if (preg_match($agent_match,$userAgent)) {
 
-            $appid = config('wechat')['appid'];
-            $curtime = time();
-            $noncestr = self::randomStr('32');
-            $weixin = new WeixinController();
-            $jsapi_ticket = $weixin->getJsapiTicket();
-            $string1 = 'jsapi_ticket=' . $jsapi_ticket . '&noncestr=' . $noncestr . '&timestamp=' . $curtime . '&url=' . $url;
+            try{
+                $appid = config('wechat')['appid'];
+                $curtime = time();
+                $noncestr = self::randomStr('32');
+                $weixin = new WeixinController();
+                $jsapi_ticket = $weixin->getJsapiTicket();
+                $string1 = 'jsapi_ticket=' . $jsapi_ticket . '&noncestr=' . $noncestr . '&timestamp=' . $curtime . '&url=' . $url;
 
-            $data = [];
-            $data['appId'] = $appid;
-            $data['timestamp'] = $curtime;
-            $data['nonceStr'] = $noncestr;
-            $data['signature'] = sha1($string1);
+                $data = [];
+                $data['appId'] = $appid;
+                $data['timestamp'] = $curtime;
+                $data['nonceStr'] = $noncestr;
+                $data['signature'] = sha1($string1);
 
-            return $data;
+                return $data;
+            } catch (\Exception $e){
+                Log::error($e);
+            }
+
         }else{
             return 'server reject';
         }
