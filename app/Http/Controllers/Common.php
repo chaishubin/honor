@@ -278,12 +278,14 @@ class Common
     public function getWechatConfig(Request $request)
     {
         $url = $request->url();
+
         $userAgent = $request->userAgent();
 
         $url_match = '/rongyao2018.huobanys.com/';
         $agent_match = '/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/';
 
-        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
+//        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
+        if (preg_match($url_match,$url)) {
 
             $appid = config('wechat')['appid'];
             $curtime = time();
