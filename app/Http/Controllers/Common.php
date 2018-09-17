@@ -285,7 +285,7 @@ class Common
         $agent_match = '/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/';
 
 //        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
-        if (preg_match($url_match,$url)) {
+        if (preg_match($agent_match,$userAgent)) {
 
             $appid = config('wechat')['appid'];
             $curtime = time();
