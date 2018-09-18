@@ -278,7 +278,8 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
-        $url = $request->url();
+        $url = $request->getHost();
+        Log::info('url'.$url);
 
         $userAgent = $request->userAgent();
 

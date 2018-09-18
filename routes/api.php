@@ -70,5 +70,5 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
 
 Route::post('timeSettingList','ManagerController@timeSettingList');
 
-Route::post('getWechatConfig','Common@getWechatConfig');
+Route::get('getWechatConfig','Common@getWechatConfig');
 
