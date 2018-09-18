@@ -69,27 +69,28 @@ class WeixinController extends Controller
         return $jsapi_ticket;
     }
 
-//    /**
-//     * [getSignpackage description] 获取签名
-//     * @return [type] [description]
-//     */
-//    public function getSignpackage(){
-//        $jsapi_ticket = $this->getJsapiTicket();    // 注意 URL 一定要动态获取，不能 hardcode.
-//        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-//        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    /**
+     * [getSignpackage description] 获取签名
+     * @return [type] [description]
+     */
+    public function getSignpackage(){
+        $jsapi_ticket = $this->getJsapiTicket();    // 注意 URL 一定要动态获取，不能 hardcode.
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 //        $noncestr = $this->createNonceStr();
-//        $timestamp = time();
-//
-//        $string1 = "jsapi_ticket={$jsapi_ticket}&noncestr={$noncestr}&timestamp={$timestamp}&url={$url}";
-//        $signature = sha1($string1);
-//        $signPackage = array(
-//            'appId'     => $this->appID,
-//            'nonceStr'  => $noncestr,
-//            'timestamp' => $timestamp,
-//            'signature' => $signature,
-//        );
-//        return $signPackage;
-//    }
+        $noncestr = Common::randomStr('32');
+        $timestamp = time();
+
+        $string1 = "jsapi_ticket={$jsapi_ticket}&noncestr={$noncestr}&timestamp={$timestamp}&url={$url}";
+        $signature = sha1($string1);
+        $signPackage = array(
+            'appId'     => $this->appid,
+            'nonceStr'  => $noncestr,
+            'timestamp' => $timestamp,
+            'signature' => $signature,
+        );
+        return $signPackage;
+    }
 
 
 }

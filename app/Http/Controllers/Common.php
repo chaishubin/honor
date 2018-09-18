@@ -278,7 +278,13 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
-        $url = 'https://rongyao2018.huobanys.com';
+
+        $weixin = new WeixinController();
+        $data = $weixin->getSignpackage();
+        return $data;
+
+       /** $url = $request->url();
+        $url = urldecode($url);
         Log::info('url'.$url);
 
         $userAgent = $request->userAgent();
@@ -311,6 +317,7 @@ class Common
 //        }else{
 //            return 'server reject';
 //        }
+        */
     }
 
 }
