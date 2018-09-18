@@ -277,7 +277,8 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
-        $url = $request->url();
+        //$url = $request->url();
+        $url = "https://rongyao2018.huobanys.com/";
         $userAgent = $request->userAgent();
 
         $url_match = '/rongyao2018.huobanys.com/';
