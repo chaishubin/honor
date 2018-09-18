@@ -74,11 +74,11 @@ class WeixinController extends Controller
      * [getSignpackage description] 获取签名
      * @return [type] [description]
      */
-    public function getSignpackage(){
+    public function getSignpackage($rongyao_url){
         $jsapi_ticket = $this->getJsapiTicket();    // 注意 URL 一定要动态获取，不能 hardcode.
         $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 //        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-        $url = "https://rongyao2018.huobanys.com";
+        $url = $rongyao_url;
         Log::info('nurl'.$url);
 //        $noncestr = $this->createNonceStr();
         $noncestr = Common::randomStr('32');

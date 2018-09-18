@@ -281,9 +281,9 @@ class Common
     {
 //        Cache::forget('wx_jsapiTicket');
 //     Cache::forget('wx_token');
-
+        $rongyao_url = $request->url ?: "https://rongyao2018.huobanys.cn";
         $weixin = new WeixinController();
-        $data = $weixin->getSignpackage();
+        $data = $weixin->getSignpackage($rongyao_url);
         return $data;
 
        /** $url = $request->url();
