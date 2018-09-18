@@ -286,7 +286,7 @@ class Common
         $agent_match = '/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/';
 
 //        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
-        if (preg_match($agent_match,$userAgent)) {
+//        if (preg_match($agent_match,$userAgent)) {
 
             try{
                 $appid = config('wechat')['appid'];
@@ -307,9 +307,9 @@ class Common
                 Log::error($e);
             }
 
-        }else{
-            return 'server reject';
-        }
+//        }else{
+//            return 'server reject';
+//        }
     }
 
 }
