@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Gregwar\Captcha\CaptchaBuilder;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -278,6 +279,8 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
+        Cache::forget('wx_jsapiTicket');
+     Cache::forget('wx_token');
 
         $weixin = new WeixinController();
         $data = $weixin->getSignpackage();
