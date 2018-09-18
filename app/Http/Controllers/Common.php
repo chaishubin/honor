@@ -279,8 +279,8 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
-        Cache::forget('wx_jsapiTicket');
-     Cache::forget('wx_token');
+//        Cache::forget('wx_jsapiTicket');
+//     Cache::forget('wx_token');
 
         $weixin = new WeixinController();
         $data = $weixin->getSignpackage();
