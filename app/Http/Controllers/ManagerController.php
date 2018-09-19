@@ -215,15 +215,28 @@ class ManagerController extends Controller
     {
         $setting = SettingModel::where('name','time_limit')->first();
         $data = json_decode($setting['value'],true);
-        $start_time = strtotime($data['sign_up_time']['start']);
-        $end_time = strtotime($data['sign_up_time']['end']);
+
         $cur_time = time();
-        if ($cur_time >= $start_time && $cur_time < $end_time){
+        $sign_up_start_time = strtotime($data['sign_up_time']['start']);
+        $sign_up_end_time = strtotime($data['sign_up_time']['end']);
+        $vote_start_time = strtotime($data['vote_time']['start']);
+        $vote_end_time = strtotime($data['vote_time']['end']);
+
+
+        if ($cur_time >= $sign_up_start_time && $cur_time < $sign_up_end_time){
             $data['can_sign_up'] = 1; //可报名
-        }elseif ($cur_time < $start_time){
+        }elseif ($cur_time < $sign_up_start_time){
             $data['can_sign_up'] = 2; //未开始
         }else{
             $data['can_sign_up'] = 3; //已过期
+        }
+
+        if ($cur_time >= $vote_start_time && $cur_time < $vote_end_time){
+            $data['can_vote'] = 1; //可报名
+        }elseif ($cur_time < $vote_start_time){
+            $data['can_vote'] = 2; //未开始
+        }else{
+            $data['can_vote'] = 3; //已过期
         }
 
         return Common::jsonFormat('200','获取成功',$data);
