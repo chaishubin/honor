@@ -68,7 +68,11 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('timeSetting','ManagerController@timeSetting');
 });
 
-Route::post('timeSettingList','ManagerController@timeSettingList');
+//Route::post('timeSettingList','ManagerController@timeSettingList');
 
 Route::any('getWechatConfig','Common@getWechatConfig');
+
+Route::group(['prefix' => '/vote'], function () {
+   Route::post('userVote', 'VoteController@userVote');
+});
 

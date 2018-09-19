@@ -271,6 +271,16 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
             </li>
+            <li>
+                <h3>投票</h3>
+                <div class="item-doc">
+                    <h5>用户投票: <small class="link">/api/vote/userVote</small></h5>
+                    <form role="form" action="/api/vote/userVote">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </li>
 
          </ul>
      </div>

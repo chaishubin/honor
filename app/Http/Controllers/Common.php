@@ -279,48 +279,10 @@ class Common
      */
     public function getWechatConfig(Request $request)
     {
-//        Cache::forget('wx_jsapiTicket');
-//     Cache::forget('wx_token');
         $rongyao_url = $request->url ?: "https://rongyao2018.huobanys.cn";
         $weixin = new WeixinController();
         $data = $weixin->getSignpackage($rongyao_url);
         return $data;
-
-       /** $url = $request->url();
-        $url = urldecode($url);
-        Log::info('url'.$url);
-
-        $userAgent = $request->userAgent();
-
-        $url_match = '/rongyao2018.huobanys.com/';
-        $agent_match = '/phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone/';
-
-//        if (preg_match($agent_match,$userAgent) && preg_match($url_match,$url)) {
-//        if (preg_match($agent_match,$userAgent)) {
-
-            try{
-                $appid = config('wechat')['appid'];
-                $curtime = time();
-                $noncestr = self::randomStr('32');
-                $weixin = new WeixinController();
-                $jsapi_ticket = $weixin->getJsapiTicket();
-                $string1 = 'jsapi_ticket=' . $jsapi_ticket . '&noncestr=' . $noncestr . '&timestamp=' . $curtime . '&url=' . $url;
-
-                $data = [];
-                $data['appId'] = $appid;
-                $data['timestamp'] = $curtime;
-                $data['nonceStr'] = $noncestr;
-                $data['signature'] = sha1($string1);
-
-                return $data;
-            } catch (\Exception $e){
-                Log::error($e);
-            }
-
-//        }else{
-//            return 'server reject';
-//        }
-        */
     }
 
 }

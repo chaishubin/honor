@@ -130,7 +130,10 @@ class ManagerController extends Controller
             //存入session
             $request->session()->put($manager_token,'manager_token'.$manager['id']);
 
-            $data = $manager_token;
+            $data['nickname'] = $manager['nickname'];
+            $data['role'] = $manager['role'];
+            $data['manager_token'] = $manager_token;
+
             return Common::jsonFormat('200','登录成功',$data);
         } catch (\Exception $e){
             Log::error($e);
