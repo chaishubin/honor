@@ -32,7 +32,6 @@ Route::group(['middleware' => ['checkUserLogin'],'prefix' => '/doctor'], functio
    Route::post('signUpList','DoctorController@signUpList');
    Route::post('userLogout','DoctorController@userLogout');
 
-   Route::post('configAward','DoctorController@configAward');
    Route::post('configJobTitle','DoctorController@configJobTitle');
    Route::post('userAwardList','DoctorController@userAwardList');
    Route::post('hospitalList','DoctorController@hospitalList');
@@ -68,6 +67,7 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('timeSetting','ManagerController@timeSetting');
 });
 
+Route::post('/doctor/configAward','DoctorController@configAward');
 Route::post('timeSettingList','ManagerController@timeSettingList');
 
 Route::any('getWechatConfig','Common@getWechatConfig');

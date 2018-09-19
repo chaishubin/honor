@@ -232,11 +232,11 @@ class ManagerController extends Controller
         }
 
         if ($cur_time >= $vote_start_time && $cur_time < $vote_end_time){
-            $data['can_vote'] = 1; //可报名
+            $data['can_vote'] = 1; //可投票
         }elseif ($cur_time < $vote_start_time){
             $data['can_vote'] = 2; //未开始
         }else{
-            $data['can_vote'] = 3; //已过期
+            $data['can_vote'] = 3; //已结束
         }
 
         return Common::jsonFormat('200','获取成功',$data);
