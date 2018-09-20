@@ -52,6 +52,8 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('managerList','ManagerController@managerList')->middleware('checkManagerRoleLogin');
     Route::post('managerAdd','ManagerController@managerAdd')->middleware('checkManagerRoleLogin');
     Route::post('managerDelete','ManagerController@managerDelete')->middleware('checkManagerRoleLogin');
+    Route::post('managerEdit','ManagerController@managerEdit');
+    Route::post('managerDetail','ManagerController@managerDetail');
 
     Route::post('managerLogout','ManagerController@managerLogout');
 
@@ -82,5 +84,4 @@ Route::post('/manager/exportEdit','ManagerController@exportEdit');
 Route::post('/manager/expertDelete','ManagerController@expertDelete');
 Route::post('/manager/expertDetail','ManagerController@expertDetail');
 
-Route::post('/manager/managerEdit','ManagerController@managerEdit');
-Route::post('/manager/managerDetail','ManagerController@managerDetail');
+
