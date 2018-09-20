@@ -31,7 +31,12 @@ class VoteController extends Controller
             $vote_relation->voters_type = $voters_type;
             $vote_relation->vote_time = time();
             $vote_relation->voters_ip = Common::getClientIp();
-            $vote_relation->save();
+            $res = $vote_relation->save();
+
+            if ($res){
+                //将投票信息写入redis
+                
+            }
 
         } catch (\Exception $e){
             Log::error($e);
