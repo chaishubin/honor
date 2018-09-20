@@ -2,17 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Manager\ExpertAddRequest;
+use App\Http\Requests\Manager\ExpertDeleteRequest;
+use App\Http\Requests\Manager\ExpertEditRequest;
+use App\Http\Requests\Manager\ExpertListRequest;
 use App\Http\Requests\Manager\ManagerAddRequest;
 use App\Http\Requests\Manager\ManagerDeleteRequest;
+use App\Http\Requests\Manager\ManagerDetailRequest;
+use App\Http\Requests\Manager\ManagerEditRequest;
 use App\Http\Requests\Manager\ManagerListRequest;
 use App\Http\Requests\Manager\ManagerLoginRequest;
 use App\Http\Requests\Manager\ManagerLogoutRequest;
 use App\Http\Requests\Manager\TimeSettingRequest;
+use App\Models\Manager\ExpertModel;
 use App\Models\Manager\ManagerModel;
 use App\Models\Manager\SettingModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
+use Psy\TabCompletion\Matcher\CommandsMatcher;
 
 class ManagerController extends Controller
 {
@@ -78,6 +86,60 @@ class ManagerController extends Controller
             Log::error($e);
             return Common::jsonFormat('500','添加失败');
         }
+    }
+
+    /**
+     * @param ManagerEditRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 管理员编辑
+     */
+    public function managerEdit(ManagerEditRequest $request)
+    {
+        $info = $request->all();
+        try{
+            $manager = ManagerModel::find($info['id']);
+            if (!$manager){
+                return Common::jsonFormat('500','此管理员不存在哟');
+            }
+
+            if (isset($info['nickname']) && !is_null($info['nickname'])){
+                $manager->nickname = $info['nickname'];
+            }
+            if (isset($info['account']) && !is_null($info['account'])){
+                $manager->account = $info['account'];
+            }
+            if (isset($info['password']) && !is_null($info['password'])){
+                $manager->password = Common::mymd5_4($info['password']);
+            }
+            if (isset($info['role']) && !is_null($info['role'])){
+                $manager->role = $info['role'];
+            }
+            if (isset($info['note']) && !is_null($info['note'])){
+                $manager->note = $info['note'];
+            }
+            $manager->save();
+            return Common::jsonFormat('200','修改成功');
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','修改失败');
+        }
+    }
+
+    /**
+     * @param ManagerDetailRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 管理员详情
+     */
+    public function managerDetail(ManagerDetailRequest $request)
+    {
+        $info = $request->all();
+
+        $manager = ManagerModel::find($info['id'])->toArray();
+        unset($manager['password']);
+        if (!$manager){
+            return Common::jsonFormat('500','此管理员不存在哟');
+        }
+        return Common::jsonFormat('500','获取失败',$manager);
     }
 
     /**
@@ -240,6 +302,128 @@ class ManagerController extends Controller
         }
 
         return Common::jsonFormat('200','获取成功',$data);
+    }
+
+    /**
+     * @param ExpertListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家列表
+     */
+    public function expertList(ExpertListRequest $request)
+    {
+        $info = $request->all();
+
+        $expert = ExpertModel::query();
+        $expert->where('status',1);
+        if (isset($info['phone_number']) && !is_null($info['phone_number'])){
+            $expert->where('phone_number', $info['phone_number']);
+        }
+        if (isset($info['name']) && !is_null($info['name'])){
+            $expert->where('name', $info['name']);
+        }
+
+        $total = $expert->count();
+        $limit = isset($info['length']) && !is_null($info['length']) ? $info['length'] : 10;
+        $offset = isset($info['cur_page']) && !is_null($info['cur_page']) ? ($info['cur_page']-1)*$limit : 0;
+
+        $res = $expert->offset($offset)->limit($limit)->orderBy('created_at','desc')->get();
+
+        $data = ['total'=>$total, 'data'=>$res];
+
+        return Common::jsonFormat('200','获取成功',$data);
+    }
+
+    /**
+     * @param ExpertAddRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家添加
+     */
+    public function expertAdd(ExpertAddRequest $request)
+    {
+        $info = $request->all();
+
+        try{
+            $expert = new ExpertModel();
+            $expert->phone_number = $info['phone_number'];
+            $expert->name = $info['name'];
+            $expert->status = 1; //默认1，有效
+            $expert->save();
+
+            return Common::jsonFormat('200','添加成功');
+
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','添加失败');
+        }
+    }
+
+    /**
+     * @param ExpertEditRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家编辑
+     */
+    public function exportEdit(ExpertEditRequest $request)
+    {
+        $info = $request->all();
+        try{
+            $expert = ExpertModel::find($info['id']);
+            if (!$expert){
+                return Common::jsonFormat('500','该专家不存在哟');
+            }
+
+            if (isset($info['phone_number']) && !is_null($info['phone_number'])){
+                $expert->phone_number = $info['phone_number'];
+            }
+            if (isset($info['name']) && !is_null($info['name'])){
+                $expert->name = $info['name'];
+            }
+            $expert->save();
+            return Common::jsonFormat('200','修改成功');
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','修改失败');
+        }
+    }
+
+    /**
+     * @param ExpertDeleteRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家删除
+     */
+    public function expertDelete(ExpertDeleteRequest $request)
+    {
+        $info = $request->all();
+
+        try{
+            $expert = ExpertModel::find($info['id']);
+            if (!$expert){
+                return Common::jsonFormat('500','此专家不存在哟');
+            }
+            $expert->status = 0; // 此处为软删除，0即为删除
+            $expert->save();
+
+            return Common::jsonFormat('200','删除成功');
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','删除失败');
+        }
+    }
+
+    /**
+     * @param ExpertDeleteRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家详情
+     */
+    public function expertDetail(ExpertDeleteRequest $request)
+    {
+        $info = $request->all();
+
+        $expert = ExpertModel::find($info['id']);
+        if (!$expert){
+            return Common::jsonFormat('500','此专家不存在哟');
+        }
+
+        return Common::jsonFormat('200','获取成功',$expert);
     }
 
     /**

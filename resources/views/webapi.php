@@ -181,6 +181,41 @@
                         </form>
                     </div>
                     <div class="item-doc">
+                        <h5>管理员编辑: <small class="link">/api/manager/managerEdit</small></h5>
+                        <form role="form" action="/api/manager/managerEdit">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="管理员id" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">nickname</span><input name="nickname" placeholder="昵称" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">account</span><input name="account" placeholder="账户" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">password</span><input name="password" placeholder="密码" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">role</span><input name="role" placeholder="角色" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">note</span><input name="note" placeholder="备注" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>管理员详情: <small class="link">/api/manager/managerDetail</small></h5>
+                        <form role="form" action="/api/manager/managerDetail">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="管理员id" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
                         <h5>管理员删除: <small class="link">/api/manager/managerDelete</small></h5>
                         <form role="form" action="/api/manager/managerDelete">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
@@ -241,7 +276,74 @@
                         </form>
                     </div>
                 </li>
-
+                <li>
+                    <h3>专家</h3>
+                    <div class="item-doc">
+                        <h5>专家列表: <small class="link">/api/manager/expertList</small></h5>
+                        <form role="form" action="/api/manager/expertList">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon">phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">cur_page</span><input name="cur_page" placeholder="当前页数" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">length</span><input name="length" placeholder="一页要显示的条数" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>专家添加: <small class="link">/api/manager/expertAdd</small></h5>
+                        <form role="form" action="/api/manager/expertAdd">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>专家编辑: <small class="link">/api/manager/exportEdit</small></h5>
+                        <form role="form" action="/api/manager/exportEdit">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon">phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">name</span><input name="name" placeholder="姓名" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>专家删除: <small class="link">/api/manager/expertDelete</small></h5>
+                        <form role="form" action="/api/manager/expertDelete">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="专家id" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>专家详情: <small class="link">/api/manager/expertDetail</small></h5>
+                        <form role="form" action="/api/manager/expertDetail">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="专家id" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div>
 

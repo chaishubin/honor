@@ -75,3 +75,12 @@ Route::any('getWechatConfig','Common@getWechatConfig');
 Route::group(['prefix' => '/vote'], function () {
    Route::post('userVote', 'VoteController@userVote');
 });
+
+Route::post('/manager/expertList','ManagerController@expertList');
+Route::post('/manager/expertAdd','ManagerController@expertAdd');
+Route::post('/manager/exportEdit','ManagerController@exportEdit');
+Route::post('/manager/expertDelete','ManagerController@expertDelete');
+Route::post('/manager/expertDetail','ManagerController@expertDetail');
+
+Route::post('/manager/managerEdit','ManagerController@managerEdit');
+Route::post('/manager/managerDetail','ManagerController@managerDetail');
