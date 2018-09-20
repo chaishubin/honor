@@ -26,7 +26,7 @@ class CheckManagerIsLogin
 
         if (!$cookie_token || !$session_token){
             Log::info('管理员尝试非法登录，其尝试的manager_token是：'.$cookie_token);
-            return Common::jsonFormat('500','server reject !');
+            return Common::jsonFormat('505','server reject !');
         }
 
         $manager = ManagerModel::where('access_token',$cookie_token)->first();

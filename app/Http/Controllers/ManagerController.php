@@ -136,10 +136,11 @@ class ManagerController extends Controller
 
         $manager = ManagerModel::find($info['id'])->toArray();
         unset($manager['password']);
+        unset($manager['access_token']);
         if (!$manager){
             return Common::jsonFormat('500','此管理员不存在哟');
         }
-        return Common::jsonFormat('500','获取失败',$manager);
+        return Common::jsonFormat('200','获取成功',$manager);
     }
 
     /**
@@ -343,6 +344,11 @@ class ManagerController extends Controller
         $info = $request->all();
 
         try{
+            $check = ExpertModel::where('phone_number', $info['phone_number'])->orWhere('name',$info['name'])->first();
+            if ($check){
+                return Common::jsonFormat('500','此专家已经存在哟');
+            }
+
             $expert = new ExpertModel();
             $expert->phone_number = $info['phone_number'];
             $expert->name = $info['name'];

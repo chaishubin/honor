@@ -315,6 +315,9 @@
                         <form role="form" action="/api/manager/exportEdit">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="专家id" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
                                 <span class="input-group-addon">phone_number</span><input name="phone_number" placeholder="手机号" value="" type="text" class="form-control">
                             </div>
                             <div class="input-group">
@@ -328,7 +331,7 @@
                         <form role="form" action="/api/manager/expertDelete">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
-                                <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="专家id" value="" type="text" class="form-control">
+                                <span class="input-group-addon"><em>*</em>id</span><input name="id[]" placeholder="格式为array|专家id" value="" type="text" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

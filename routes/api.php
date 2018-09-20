@@ -66,6 +66,12 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('signUpInfoReview','DoctorController@signUpInfoReview');
     Route::post('signUpInfoReviewList','DoctorController@signUpInfoReviewList');
 
+//    Route::post('expertList','ManagerController@expertList');
+//    Route::post('expertAdd','ManagerController@expertAdd');
+//    Route::post('exportEdit','ManagerController@exportEdit');
+//    Route::post('expertDelete','ManagerController@expertDelete');
+//    Route::post('expertDetail','ManagerController@expertDetail');
+
     Route::post('timeSetting','ManagerController@timeSetting');
 });
 
@@ -75,7 +81,8 @@ Route::post('timeSettingList','ManagerController@timeSettingList');
 Route::any('getWechatConfig','Common@getWechatConfig');
 
 Route::group(['prefix' => '/vote'], function () {
-   Route::post('userVote', 'VoteController@userVote');
+    Route::post('userVote', 'VoteController@userVote');
+    Route::any('checkExpert', 'VoteController@checkExpert');
 });
 
 Route::post('/manager/expertList','ManagerController@expertList');
