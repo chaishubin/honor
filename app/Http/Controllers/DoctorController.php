@@ -606,7 +606,7 @@ class DoctorController extends Controller
      * @return array|string
      * 荣耀医生职称配置
      */
-    public function configJobTitle($id='')
+    public function configJobTitle($id='null')
     {
         $info = [
             ['id' => '101', 'name' => '主任医师'],
@@ -620,7 +620,7 @@ class DoctorController extends Controller
         ];
 
         //根据id返回具体的name值
-        if ($id){
+        if ($id != 'null'){
             foreach ($info as $v){
                 if ($id == $v['id']){
                     return $v['name'];
