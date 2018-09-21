@@ -133,6 +133,20 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+                    <div class="item-doc">
+                        <h5>奖项配置: <small class="link">/api/manager/configAward</small></h5>
+                        <form role="form" action="/api/manager/configAward">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                    <div class="item-doc">
+                        <h5>职称配置: <small class="link">/api/manager/configJobTitle</small></h5>
+                        <form role="form" action="/api/manager/configJobTitle">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
                 </li>
                 <li>
                     <h3>管理员</h3>

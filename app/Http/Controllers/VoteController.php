@@ -35,7 +35,7 @@ class VoteController extends Controller
 
             if ($res){
                 //将投票信息写入redis
-                
+                Redis::hmset('rongyao2018:vote:'.$voters['id'],);
             }
 
         } catch (\Exception $e){
