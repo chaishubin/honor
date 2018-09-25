@@ -34,6 +34,7 @@ class DoctorController extends Controller
         $info = $request->all();
 
         $signup_query = DoctorModel::query();
+        $signup_query->where('wanted_award',$info['award_id']);
 
         if (isset($info['name']) && $info['name']){
             $signup_query->where('name',$info['name']);
