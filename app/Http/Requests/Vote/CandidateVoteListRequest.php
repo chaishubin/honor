@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Doctor;
+namespace App\Http\Requests\Vote;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SignUpListRequest extends FormRequest
+class CandidateVoteListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,13 +25,9 @@ class SignUpListRequest extends FormRequest
     {
         return [
             'award_id' => 'required|numeric',
-            'name' => 'nullable|max:100',
-            'job_title' => 'nullable|numeric',
-            'hospital_name' => 'nullable',
-            'department' => 'nullable|max:100',
-            'status' => 'nullable|numeric',
-            'cur_page' => 'nullable|numeric',
-            'length' => 'nullable|numeric',
+            'is_pc' => 'nullable',
+            'province' => 'nullable|numeric',
+            'doctor_name' => 'nullable'
         ];
     }
 }

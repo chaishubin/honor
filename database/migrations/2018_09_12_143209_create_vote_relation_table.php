@@ -16,6 +16,7 @@ class CreateVoteRelationTable extends Migration
         Schema::create('vote_relation', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('candidate_id')->comment('候选人id');
+            $table->tinyInteger('award_id')->comment('奖项id/对应doctor表中的主键--wanted_award');
             $table->integer('voters_id')->comment('投票人id');
             $table->tinyInteger('voters_type')->comment('投票人类型，1大众，2专家');
             $table->integer('vote_time')->nullable()->comment('投票时间');

@@ -15,7 +15,8 @@ class CreateVoteTable extends Migration
     {
         Schema::create('vote', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->comment('用户id');
+            $table->integer('candidate_id')->comment('候选人id/对应doctor表中的主键--id');
+            $table->tinyInteger('award_id')->comment('奖项id/对应doctor表中的主键--wanted_award');
             $table->bigInteger('public_votes')->nullable()->comment('大众票数');
             $table->bigInteger('expert_votes')->nullable()->comment('专家票数');
             $table->bigInteger('score')->nullable()->comment('分数');

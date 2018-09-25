@@ -285,4 +285,17 @@ class Common
         return $data;
     }
 
+    /**
+     * @param $query
+     * 例如 $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']]); //这后面没有 first(),get()之类的
+     * 输出带参数的sql语句
+     */
+    public static function printSql($query)
+    {
+        $bindings = $query->getBindings();
+        $sql = str_replace('?', '%s', $query->toSql());
+        $sql = sprintf($sql, ...$bindings);
+        dd($sql);die;
+    }
+
 }

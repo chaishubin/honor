@@ -277,6 +277,22 @@ h2{ margin:0; padding:25px 0; }
                     <h5>用户投票: <small class="link">/api/vote/userVote</small></h5>
                     <form role="form" action="/api/vote/userVote">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon">candidate_id</span><input name="candidate_id" placeholder="候选人id" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
+                    <h5>投票列表: <small class="link">/api/vote/candidateVoteList</small></h5>
+                    <form role="form" action="/api/vote/candidateVoteList">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">doctor_name</span><input name="doctor_name" placeholder="医生姓名" value="" type="text" class="form-control">
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

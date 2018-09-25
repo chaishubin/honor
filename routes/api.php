@@ -83,6 +83,7 @@ Route::any('getWechatConfig','Common@getWechatConfig');
 Route::group(['prefix' => '/vote'], function () {
     Route::post('userVote', 'VoteController@userVote');
     Route::any('checkExpert', 'VoteController@checkExpert');
+    Route::any('candidateVoteList', 'VoteController@candidateVoteList');
 });
 
 Route::post('/manager/expertList','ManagerController@expertList');
