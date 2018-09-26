@@ -65,8 +65,8 @@ class VoteController extends Controller
                     //存入hash类型的redis
                     Redis::hmset('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id'],['public_votes' => $public_votes, 'expert_votes' => $expert_votes, 'score' => 0]);
                 }
-                $res = Redis::hgetall('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id']);
-                dd($res);die;
+//                $res = Redis::hgetall('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id']);
+//                dd($res);die;
                 return Common::jsonFormat('200','投票成功');
             }
             return Common::jsonFormat('500','投票失败');
