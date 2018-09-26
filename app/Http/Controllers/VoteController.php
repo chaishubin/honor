@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Redis;
 
 class VoteController extends Controller
 {
+    /**
+     * @param UserVoteRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 用户投票
+     */
     public function userVote(UserVoteRequest $request)
     {
         $info = $request->all();
@@ -31,7 +36,11 @@ class VoteController extends Controller
 //            $info['award_id'] = 101;
 
             $check_expert = $this->checkExpert($voters['phone_number']);
-            $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家，否则就是大众
+            $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家2，否则就是大众1
+
+            if ($voters_type == 1){
+
+            }
 
             //将投票信息写入投票-选举人关系表中
             $vote_relation = new VoteRelationModel();

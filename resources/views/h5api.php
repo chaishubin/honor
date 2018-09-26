@@ -280,6 +280,9 @@ h2{ margin:0; padding:25px 0; }
                         <div class="input-group">
                             <span class="input-group-addon"><em>*</em>candidate_id</span><input name="candidate_id" placeholder="候选人id" value="" type="text" class="form-control">
                         </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
+                        </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>

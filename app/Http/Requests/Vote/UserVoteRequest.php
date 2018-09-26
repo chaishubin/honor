@@ -25,6 +25,7 @@ class UserVoteRequest extends FormRequest
     {
         return [
             'candidate_id' => 'required|numeric',
+            'award_id' => 'required|numeric'
         ];
     }
 }
