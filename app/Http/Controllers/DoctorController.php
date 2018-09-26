@@ -339,19 +339,23 @@ class DoctorController extends Controller
             $cookie_manager_token = $request->cookie('manager_token');
             $session_manager_id = $request->session()->get($cookie_manager_token);
             DB::transaction(function () use ($info,$session_manager_id) {
-                //在报名信息审核表 中新增数据
-                $review = new SignUpInfoReview();
-                $review->user_id = substr($session_manager_id,13);
-                $review->info_id = $info['info_id'];
-                $review->status = $info['status'];
-                $review->content = $info['content'];
-                $review->review_way = $info['review_way'];
-                $review->save();
 
-                //更新doctor表中的status值
-                $doctor = DoctorModel::find($info['info_id']);
-                $doctor->status = $info['status'];
-                $doctor->save();
+                foreach ($info['info_id'] as $v){
+                    //在报名信息审核表 中新增数据
+                    $review = new SignUpInfoReview();
+                    $review->user_id = substr($session_manager_id,13);
+                    $review->info_id = $v;
+                    $review->status = $info['status'];
+                    $review->content = $info['content'];
+                    $review->review_way = $info['review_way'];
+                    $review->save();
+
+                    //更新doctor表中的status值
+                    $doctor = DoctorModel::find($v);
+                    $doctor->status = $info['status'];
+                    $doctor->save();
+                }
+
             });
 
             return Common::jsonFormat('200','审核成功');

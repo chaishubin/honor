@@ -24,7 +24,7 @@ class SignUpInfoReviewRequest extends FormRequest
     public function rules()
     {
         return [
-            'info_id' => 'required|numeric',
+            'info_id' => 'required|array',
             'status' => 'required|numeric',
             'content' => 'required|max:300',
             'review_way' => 'required|numeric',
