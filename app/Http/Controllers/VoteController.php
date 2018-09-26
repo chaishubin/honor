@@ -38,7 +38,17 @@ class VoteController extends Controller
             $check_expert = $this->checkExpert($voters['phone_number']);
             $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家2，否则就是大众1
 
-            if ($voters_type == 1){
+            $vote_relation = VoteRelationModel::where('voters_id',$voters['id'])->get();
+            if ($voters_type == 1){ // 大众
+                if ($vote_relation){ // 若查询到记录，说明该用户已经至少投过一次票了，普通用户只能参与投票一次
+                    return Common::jsonFormat('500','您只能投一票，您已经参与过投票了');
+                }
+            }else{ // 专家
+                $count_vote = VoteRelationModel::where('voters_id',$voters['id'])->count();
+
+                if ($count_vote >= 10){ // 专家在每个奖项有10次投票机会
+                    return Common::jsonFormat('500','您在该奖项的投票次数已用完');
+                }
 
             }
 
@@ -131,6 +141,39 @@ class VoteController extends Controller
             }
         }
         return Common::jsonFormat('200','获取成功',$list);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * 专家奖项列表及剩余票数
+     */
+    public function expertAwardListWithVotes(Request $request)
+    {
+        $doctor_class = new DoctorController();
+        $award_list = $doctor_class->configAward();
+
+        $cookie_user_token = $request->cookie('user_token');
+        $voters = UserModel::where('access_token',$cookie_user_token)->first();
+        if (!$voters){
+            return Common::jsonFormat('500','用户信息不正确');
+        }
+
+//        $voters = UserModel::where('access_token','4ecdfcbe1dcf482eb9bf5e1a0a761091')->first();
+//        $info['award_id'] = 101;
+
+        $check_expert = $this->checkExpert($voters['phone_number']);
+        if ($check_expert != 'pass'){ // pass 代表专家
+            return Common::jsonFormat('500','您没有权限');
+        }
+
+        //遍历奖项列表 ， 往每条记录中插入剩余票数
+        foreach ($award_list as &$v){
+            $count_votes = VoteRelationModel::where(['voters_id' => $voters['id'], 'award_id' => $v['id']])->count();
+            $v['votes'] = 10 - $count_votes; //剩余票数
+        }
+
+        return Common::jsonFormat('200','获取成功',$award_list);
     }
 
 

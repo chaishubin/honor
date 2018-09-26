@@ -299,6 +299,13 @@ h2{ margin:0; padding:25px 0; }
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
                 </div>
+                <div class="item-doc">
+                    <h5>专家奖项列表及剩余票数: <small class="link">/api/vote/expertAwardListWithVotes</small></h5>
+                    <form role="form" action="/api/vote/expertAwardListWithVotes">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </li>
 
          </ul>
