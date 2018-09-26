@@ -54,8 +54,8 @@ class VoteController extends Controller
 
             //将投票信息写入投票-选举人关系表中
             $vote_relation = new VoteRelationModel();
-            $vote_relation->candidate_id = $info['candidate_id'];
-            $vote_relation->voters_id = $voters['id'];
+            $vote_relation->candidate_id = $info['candidate_id']; //候选人id，即doctor表中的id
+            $vote_relation->voters_id = $voters['id']; //当前登陆用户，在user表中的id
             $vote_relation->award_id = $info['award_id'];
             $vote_relation->voters_type = $voters_type;
             $vote_relation->vote_time = time();
@@ -64,13 +64,13 @@ class VoteController extends Controller
 
             if ($res){
                 //判断redis中是否存在此key 存在返回1，不存在返回0
-                if (Redis::exists('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id'])){ //存在,进行 更新操作
+                if (Redis::exists('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'])){ //存在,进行 更新操作
                     if ($voters_type == 2){ //专家
                         //专家票数加一
-                        Redis::hincrby('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id'],'expert_votes',1);
+                        Redis::hincrby('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],'expert_votes',1);
                     }else{ // 大众
                         //大众票数加一
-                        Redis::hincrby('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id'],'public_votes',1);
+                        Redis::hincrby('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],'public_votes',1);
                     }
                 }else{ //不存在，进行新增操作
                     if ($voters_type == 2){ //专家
@@ -82,9 +82,9 @@ class VoteController extends Controller
                     }
 
                     //存入hash类型的redis
-                    Redis::hmset('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id'],['public_votes' => $public_votes, 'expert_votes' => $expert_votes, 'score' => 0]);
+                    Redis::hmset('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],['public_votes' => $public_votes, 'expert_votes' => $expert_votes]);
                 }
-//                $res = Redis::hgetall('rongyao2018:vote:'.$voters['candidate_id'].':'.$info['award_id']);
+//                $res = Redis::hgetall('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id']);
 //                dd($res);die;
                 return Common::jsonFormat('200','投票成功');
             }
@@ -104,43 +104,59 @@ class VoteController extends Controller
     {
         $info = $request->all();
         $sort = (isset($info['is_pc']) && $info['is_pc'] == 'true') ? 'score' : 'public_votes';
-        $vote = VoteModel::where('award_id',$info['award_id'])->orderBy($sort,'desc')->get();
+//        global $sort;
 
-        $list = [];
-        if ($vote){
-            $h5where = [];
-            if (isset($info['doctor_name']) && !is_null($info['doctor_name'])){
-                $h5where[] = ['name','like', '%'.$info['doctor_name'].'%'];
-            }
-            foreach ($vote as $k => $v){
-                $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']])->where($h5where)->first();
-
-                //如果是pc端，搜索条件传入了省份，则要筛选
-                if (isset($info['is_pc']) && $info['is_pc'] == 'true'){
-                    if (isset($info['province']) && !is_null($info['province'])){
-                        //根据省份id的前三位匹配出医院表中，地区id前三位相匹配的医院id
-                        $hospital = HospitalModel::where('district_id','like',substr($info['province'],0,3).'%')->get(['id']);
-                        //如果没查到医院，就返回空
-                        if ($hospital){
-                            $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']])->whereIn('hospital_id',$hospital)->first();
-                            Log::info($doctor_info);
-                        }else{
-                            $doctor_info = [];
-                        }
-                    }else{
-                        $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']])->first();
-                    }
-                }
-
-                //没查到相关信息，就跳出循环，不计入此条记录
-                if (!$doctor_info){
-                    continue;
-                }
-                $list[$k] = $doctor_info;
-                $list[$k]['votes'] = $v['public_votes'];
-            }
+        $doctor = DoctorModel::query();
+        $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
+        if (isset($info['doctor_name']) && !is_null($info['doctor_name'])){
+            $doctor->where('name','like', '%'.$info['doctor_name'].'%');
         }
-        return Common::jsonFormat('200','获取成功',$list);
+
+        //如果是pc端，搜索条件传入了省份，则要筛选
+        if (isset($info['province']) && !is_null($info['province'])){
+            //根据省份id的前三位匹配出医院表中，地区id前三位相匹配的医院id
+            $hospital = HospitalModel::where('district_id', 'like', substr($info['province'], 0, 3) . '%')->get(['id']);
+
+            $doctor->whereIn('hospital_id', $hospital)->first();
+        }
+
+        $result = [];
+        $doctor->chunk(100, function($res) use (&$result) {
+            //遍历把redis中的票数信息插入每条记录中
+            foreach ($res as $k => $v){
+                $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
+                $expert_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'expert_votes');
+                $score = $public_votes + ($expert_votes * 4);
+
+                $result[$k]['id'] = $v['id'];
+                $result[$k]['name'] = $v['name'];
+                $result[$k]['hospital_name'] = $v['hospital_name'];
+                $result[$k]['department'] = $v['department'];
+                $result[$k]['job_title'] = $v['job_title'];
+                $result[$k]['public_votes'] = $public_votes;
+                $result[$k]['expert_votes'] = $expert_votes;
+                $result[$k]['score'] = $score;
+                //根据遍历记录中的医院id，查出对应的地区名称
+                $hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
+                //截取出地区名称中的省份
+                $result[$k]['province'] = mb_substr($hospital['district_address'],3,2);
+            }
+        });
+
+//        dd($result);die;
+        function sort_res($a,$b){
+            if ($a[$sort] == $b[$sort]) return 0;
+            return ($a[$sort] <$b[$sort]) ? -1 : 1;
+        }
+
+        $data = uasort($result,"sort_res");
+
+        $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
+        $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
+
+        $data = ['total' => count($result), 'data' => array_slice($data,$offset,$limit)];
+
+        return Common::jsonFormat('200', '获取成功',$data);
     }
 
     /**

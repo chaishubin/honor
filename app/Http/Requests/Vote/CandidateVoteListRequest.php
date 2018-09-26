@@ -25,9 +25,10 @@ class CandidateVoteListRequest extends FormRequest
     {
         return [
             'award_id' => 'required|numeric',
-            'is_pc' => 'nullable',
             'province' => 'nullable|numeric',
-            'doctor_name' => 'nullable'
+            'doctor_name' => 'nullable',
+            'cur_page' => 'nullable|numeric',
+            'length' => 'nullable|numeric'
         ];
     }
 }

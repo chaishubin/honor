@@ -322,6 +322,9 @@ class DoctorController extends Controller
         $info = $request->all();
 
         $review = SignUpInfoReview::where('info_id',$info['info_id'])->orderBy('created_at','desc')->get();
+        foreach ($review as &$v){
+            $v['operate_person'] = $v->manager->nickname;
+        }
 
         return Common::jsonFormat('200','获取成功',$review);
     }

@@ -9,6 +9,4 @@ class DoctorModel extends Model
     protected $table = 'doctor';
 
 
-
-
 }
