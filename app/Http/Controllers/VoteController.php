@@ -89,8 +89,12 @@ class VoteController extends Controller
 
         $list = [];
         if ($vote){
+            $h5where = [];
+            if (isset($info['doctor_name']) && !is_null($info['doctor_name'])){
+                $h5where[] = ['name','like', '%'.$info['doctor_name'].'%'];
+            }
             foreach ($vote as $k => $v){
-                $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']])->first();
+                $doctor_info = UserModel::where(['id' => $v['candidate_id']])->first()->signUpInfo()->where(['wanted_award' => $info['award_id']])->where($h5where)->first();
 
                 //如果是pc端，搜索条件传入了省份，则要筛选
                 if (isset($info['is_pc']) && $info['is_pc'] == 'true'){
