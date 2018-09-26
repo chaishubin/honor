@@ -278,7 +278,7 @@ h2{ margin:0; padding:25px 0; }
                     <form role="form" action="/api/vote/userVote">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                         <div class="input-group">
-                            <span class="input-group-addon">candidate_id</span><input name="candidate_id" placeholder="候选人id" value="" type="text" class="form-control">
+                            <span class="input-group-addon"><em>*</em>candidate_id</span><input name="candidate_id" placeholder="候选人id" value="" type="text" class="form-control">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
