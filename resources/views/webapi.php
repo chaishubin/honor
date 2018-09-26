@@ -374,6 +374,9 @@
                                 <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
                             </div>
                             <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>is_pc</span><input name="is_pc" placeholder="此处传固定值 ·is_pc· " value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
                                 <span class="input-group-addon">province</span><input name="province" placeholder="省份id" value="" type="text" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>

@@ -104,7 +104,6 @@ class VoteController extends Controller
     {
         $info = $request->all();
         $sort = (isset($info['is_pc']) && $info['is_pc'] == 'true') ? 'score' : 'public_votes';
-//        global $sort;
 
         $doctor = DoctorModel::query();
         $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
@@ -143,21 +142,23 @@ class VoteController extends Controller
             }
         });
 
-//        dd($result);die;
-        function sort_res($a,$b){
+        //对result按找票数，或分数排序
+        uasort($result,function ($a,$b) use ($sort){
             if ($a[$sort] == $b[$sort]) return 0;
-            return ($a[$sort] <$b[$sort]) ? -1 : 1;
-        }
+            return ($a[$sort] < $b[$sort]) ? -1 : 1;
+        });
 
-        $data = uasort($result,"sort_res");
+        //因为上面函数的排序，是正序排序，按从小到大排的，所以这里要反过来
+        $desc_result = array_reverse($result);
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
 
-        $data = ['total' => count($result), 'data' => array_slice($data,$offset,$limit)];
+        $data = ['total' => count($result), 'data' => array_slice($desc_result,$offset,$limit)];
 
         return Common::jsonFormat('200', '获取成功',$data);
     }
+
 
     /**
      * @param Request $request

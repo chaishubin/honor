@@ -72,7 +72,7 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('expertDelete','ManagerController@expertDelete');
     Route::post('expertDetail','ManagerController@expertDetail');
 
-//    Route::post('candidateVoteList', 'VoteController@candidateVoteList');
+    Route::post('candidateVoteList', 'VoteController@candidateVoteList');
 
     Route::post('timeSetting','ManagerController@timeSetting');
 });
@@ -94,6 +94,8 @@ Route::group(['prefix' => '/vote'], function () {
 //Route::post('/manager/exportEdit','ManagerController@exportEdit');
 //Route::post('/manager/expertDelete','ManagerController@expertDelete');
 //Route::post('/manager/expertDetail','ManagerController@expertDetail');
+
+//Route::post('/manager/candidateVoteList', 'VoteController@candidateVoteList');
 
 
 

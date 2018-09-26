@@ -26,6 +26,7 @@ class CandidateVoteListRequest extends FormRequest
         return [
             'award_id' => 'required|numeric',
             'province' => 'nullable|numeric',
+            'is_pc' => 'nullable',
             'doctor_name' => 'nullable',
             'cur_page' => 'nullable|numeric',
             'length' => 'nullable|numeric'
