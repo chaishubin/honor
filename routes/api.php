@@ -66,11 +66,13 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('signUpInfoReview','DoctorController@signUpInfoReview');
     Route::post('signUpInfoReviewList','DoctorController@signUpInfoReviewList');
 
-//    Route::post('expertList','ManagerController@expertList');
-//    Route::post('expertAdd','ManagerController@expertAdd');
-//    Route::post('exportEdit','ManagerController@exportEdit');
-//    Route::post('expertDelete','ManagerController@expertDelete');
-//    Route::post('expertDetail','ManagerController@expertDetail');
+    Route::post('expertList','ManagerController@expertList');
+    Route::post('expertAdd','ManagerController@expertAdd');
+    Route::post('exportEdit','ManagerController@exportEdit');
+    Route::post('expertDelete','ManagerController@expertDelete');
+    Route::post('expertDetail','ManagerController@expertDetail');
+
+    Route::post('candidateVoteList', 'VoteController@candidateVoteList');
 
     Route::post('timeSetting','ManagerController@timeSetting');
 });
@@ -86,10 +88,10 @@ Route::group(['prefix' => '/vote'], function () {
     Route::any('candidateVoteList', 'VoteController@candidateVoteList');
 });
 
-Route::post('/manager/expertList','ManagerController@expertList');
-Route::post('/manager/expertAdd','ManagerController@expertAdd');
-Route::post('/manager/exportEdit','ManagerController@exportEdit');
-Route::post('/manager/expertDelete','ManagerController@expertDelete');
-Route::post('/manager/expertDetail','ManagerController@expertDetail');
+//Route::post('/manager/expertList','ManagerController@expertList');
+//Route::post('/manager/expertAdd','ManagerController@expertAdd');
+//Route::post('/manager/exportEdit','ManagerController@exportEdit');
+//Route::post('/manager/expertDelete','ManagerController@expertDelete');
+//Route::post('/manager/expertDetail','ManagerController@expertDetail');
 
 

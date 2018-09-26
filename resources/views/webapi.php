@@ -367,8 +367,8 @@
                 <li>
                     <h3>投票</h3>
                     <div class="item-doc">
-                        <h5>投票列表: <small class="link">/api/vote/candidateVoteList</small></h5>
-                        <form role="form" action="/api/vote/candidateVoteList">
+                        <h5>投票列表: <small class="link">/api/manager/candidateVoteList</small></h5>
+                        <form role="form" action="/api/manager/candidateVoteList">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">

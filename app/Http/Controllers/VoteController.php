@@ -21,14 +21,14 @@ class VoteController extends Controller
         $info = $request->all();
 
         try{
-//            $cookie_user_token = $request->cookie('user_token');
-//            $voters = UserModel::where('access_token',$cookie_user_token)->first();
-//            if (!$voters){
-//                return Common::jsonFormat('500','用户信息不正确');
-//            }
+            $cookie_user_token = $request->cookie('user_token');
+            $voters = UserModel::where('access_token',$cookie_user_token)->first();
+            if (!$voters){
+                return Common::jsonFormat('500','用户信息不正确');
+            }
 
-            $voters = UserModel::where('access_token','4ecdfcbe1dcf482eb9bf5e1a0a761091')->first();
-            $info['award_id'] = 101;
+//            $voters = UserModel::where('access_token','4ecdfcbe1dcf482eb9bf5e1a0a761091')->first();
+//            $info['award_id'] = 101;
 
             $check_expert = $this->checkExpert($voters['phone_number']);
             $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家，否则就是大众
