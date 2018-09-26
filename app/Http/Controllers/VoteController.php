@@ -128,6 +128,7 @@ class VoteController extends Controller
                 $score = $public_votes + ($expert_votes * 4);
 
                 $result[$k]['id'] = $v['id'];
+                $result[$k]['full_face_photo'] = $v['full_face_photo'];
                 $result[$k]['name'] = $v['name'];
                 $result[$k]['hospital_name'] = $v['hospital_name'];
                 $result[$k]['department'] = $v['department'];
