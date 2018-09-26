@@ -379,6 +379,12 @@
                             <div class="input-group">
                                 <span class="input-group-addon">province</span><input name="province" placeholder="省份id" value="" type="text" class="form-control">
                             </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">cur_page</span><input name="cur_page" placeholder="当前页数" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">length</span><input name="length" placeholder="每页显示条数" value="" type="text" class="form-control">
+                            </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
