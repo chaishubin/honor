@@ -39,7 +39,7 @@ class VoteController extends Controller
             $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家2，否则就是大众1
 
             if ($voters_type == 1){ // 大众
-                $vote_user_relation = VoteRelationModel::where('voters_id',$voters['id'])->get();
+                $vote_user_relation = VoteRelationModel::where('voters_id',$voters['id'])->first();
                 Log::info('$vote_relation'.$vote_user_relation);
                 if ($vote_user_relation){ // 若查询到记录，说明该用户已经至少投过一次票了，普通用户只能参与投票一次
                     return Common::jsonFormat('500','您只能投一票，您已经参与过投票了');
