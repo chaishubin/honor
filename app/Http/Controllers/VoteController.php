@@ -50,6 +50,12 @@ class VoteController extends Controller
                     return Common::jsonFormat('500','您在该奖项的投票次数已用完');
                 }
 
+                //专家对一个用户也只能投一票
+                $expert_vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $info['candidate_id']])->first();
+
+                if ($expert_vote_relation){
+                    return Common::jsonFormat('500','您已经对此用户投过票了，不要重复投票');
+                }
             }
 
             //将投票信息写入投票-选举人关系表中
@@ -98,7 +104,7 @@ class VoteController extends Controller
     /**
      * @param CandidateVoteListRequest $request
      * @return \Illuminate\Http\JsonResponse
-     * 候选人投票列表
+     * 候选人投票列表 PC端的列表、H5端用户未登录的列表
      */
     public function candidateVoteList(CandidateVoteListRequest $request)
     {
@@ -153,19 +159,86 @@ class VoteController extends Controller
             }
         });
 
-        //对result按找票数，或分数排序
-        uasort($result,function ($a,$b) use ($sort){
-            if ($a[$sort] == $b[$sort]) return 0;
-            return ($a[$sort] < $b[$sort]) ? -1 : 1;
-        });
-
-        //因为上面函数的排序，是正序排序，按从小到大排的，所以这里要反过来
-        $desc_result = array_reverse($result);
+        //对数据按照public_votes或score
+        $sort_field = array_column($result,$sort);
+        array_multisort($sort_field,SORT_DESC,$result);
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
 
-        $data = ['total' => count($result), 'data' => array_slice($desc_result,$offset,$limit)];
+        $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
+
+        return Common::jsonFormat('200', '获取成功',$data);
+    }
+
+    /**
+     * @param CandidateVoteListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 候选人投票列表 H5端已登录用户的列表
+     */
+    public function loginedCandidateVoteList(CandidateVoteListRequest $request)
+    {
+        $info = $request->all();
+
+        $cookie_user_token = $request->cookie('user_token');
+        $voters = UserModel::where('access_token',$cookie_user_token)->first();
+        if (!$voters){
+            return Common::jsonFormat('500','用户信息不正确');
+        }
+
+        //闭包函数，用来检测当前登录用户是否已经对医生投过票
+        $check_is_voted = function($candidate_id) use ($voters)
+        {
+            $vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $candidate_id]);
+            if ($vote_relation){
+                return true;
+            }else{
+                return false;
+            }
+        };
+
+
+        $doctor = DoctorModel::query();
+        $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
+        if (isset($info['doctor_name']) && !is_null($info['doctor_name'])){
+            $doctor->where('name','like', '%'.$info['doctor_name'].'%');
+        }
+
+        $result = [];
+        $doctor->chunk(100, function($res) use (&$result,$check_is_voted) {
+            $doctor_class = new DoctorController();
+            //遍历把redis中的票数信息插入每条记录中
+            foreach ($res as $k => $v){
+                $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
+
+                $result[$k]['id'] = $v['id'];
+                $result[$k]['full_face_photo'] = $v['full_face_photo'];
+                $result[$k]['name'] = $v['name'];
+                $result[$k]['hospital_name'] = $v['hospital_name'];
+                $result[$k]['department'] = $v['department'];
+
+                //拼接号职称的 全称
+                $job_title = json_decode($v['job_title'], true);
+                $first = $doctor_class->configJobTitle($job_title['first']);
+                $second = '';
+                if ($job_title['second']){
+                    $second = ' · '.$doctor_class->configJobTitle($job_title['second']);
+                }
+
+                $result[$k]['job_title'] = $first.$second;
+                $result[$k]['public_votes'] = $public_votes;
+                $result[$k]['is_voted'] = $check_is_voted($v['id']);
+            }
+        });
+
+        //对数据按照public_votes或score
+        $sort_field = array_column($result,'public_votes');
+        array_multisort($sort_field,SORT_DESC,$result);
+
+        $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
+        $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
+
+        $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
 
         return Common::jsonFormat('200', '获取成功',$data);
     }

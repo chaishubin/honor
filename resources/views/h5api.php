@@ -287,8 +287,27 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
-                    <h5>投票列表: <small class="link">/api/vote/candidateVoteList</small></h5>
+                    <h5>用户未登录的投票列表: <small class="link">/api/vote/candidateVoteList</small></h5>
                     <form role="form" action="/api/vote/candidateVoteList">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">doctor_name</span><input name="doctor_name" placeholder="医生姓名" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">cur_page</span><input name="cur_page" placeholder="当前页数" value="" type="text" class="form-control">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon">length</span><input name="length" placeholder="每页显示条数" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
+                    <h5>用户登录后的投票列表: <small class="link">/api/vote/loginedCandidateVoteList</small></h5>
+                    <form role="form" action="/api/vote/loginedCandidateVoteList">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                         <div class="input-group">
                             <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
