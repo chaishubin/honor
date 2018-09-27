@@ -190,6 +190,7 @@ class VoteController extends Controller
         $check_is_voted = function($candidate_id) use ($voters)
         {
             $vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $candidate_id]);
+            Log::info($voters['id'].'|'.$candidate_id);
             if ($vote_relation){
                 return true;
             }else{
