@@ -26,7 +26,7 @@ class SignUpInfoReviewRequest extends FormRequest
         return [
             'info_id' => 'required|array',
             'status' => 'required|numeric',
-            'content' => 'required|max:300',
+            'content' => 'nullable|max:300',
             'review_way' => 'required|numeric',
         ];
     }

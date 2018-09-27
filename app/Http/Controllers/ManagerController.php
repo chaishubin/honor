@@ -474,7 +474,7 @@ class ManagerController extends Controller
                     $review->user_id = substr($session_manager_id,13);
                     $review->info_id = $v;
                     $review->status = $info['status'];
-                    $review->content = $info['content'];
+                    $review->content = isset($info['content']) ? $info['content'] : '';
                     $review->review_way = $info['review_way'];
                     $review->save();
 

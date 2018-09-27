@@ -128,7 +128,7 @@
                                 <span class="input-group-addon"><em>*</em>status</span><input name="status" placeholder="审核状态，1待审核，2已通过，3未通过" value="" type="text" class="form-control">
                             </div>
                             <div class="input-group">
-                                <span class="input-group-addon"><em>*</em>content</span><input name="content" placeholder="审核内容" value="" type="text" class="form-control">
+                                <span class="input-group-addon">content</span><input name="content" placeholder="审核内容" value="" type="text" class="form-control">
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon"><em>*</em>review_way</span><input name="review_way" placeholder="审核方式，1单条审核，2批量审核" value="" type="text" class="form-control">
