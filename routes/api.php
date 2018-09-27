@@ -86,7 +86,7 @@ Route::group(['prefix' => '/vote'], function () {
     Route::post('userVote', 'VoteController@userVote');
     Route::post('checkExpert', 'VoteController@checkExpert');
     Route::post('candidateVoteList', 'VoteController@candidateVoteList');
-    Route::any('expertAwardListWithVotes', 'VoteController@expertAwardListWithVotes');
+    Route::any('expertAwardListWithVotes', 'VoteController@expertAwardListWithVotes')->middleware('checkUserLogin');
 });
 
 //Route::post('/manager/expertList','ManagerController@expertList');
