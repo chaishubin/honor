@@ -189,8 +189,7 @@ class VoteController extends Controller
         //闭包函数，用来检测当前登录用户是否已经对医生投过票
         $check_is_voted = function($candidate_id) use ($voters)
         {
-            $vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $candidate_id]);
-            Log::info($voters['id'].'|'.$candidate_id);
+            $vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $candidate_id])->first();
             if ($vote_relation){
                 return true;
             }else{
