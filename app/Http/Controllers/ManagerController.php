@@ -464,6 +464,7 @@ class ManagerController extends Controller
         $info = $request->all();
 
         try{
+
             $cookie_manager_token = $request->cookie('manager_token');
             $session_manager_id = $request->session()->get($cookie_manager_token);
             DB::transaction(function () use ($info,$session_manager_id) {
@@ -476,12 +477,20 @@ class ManagerController extends Controller
                     $review->status = $info['status'];
                     $review->content = isset($info['content']) ? $info['content'] : '';
                     $review->review_way = $info['review_way'];
-                    $review->save();
+                    $res1 = $review->save();
 
                     //更新doctor表中的status值
                     $doctor = DoctorModel::find($v);
                     $doctor->status = $info['status'];
-                    $doctor->save();
+                    $res2 = $doctor->save();
+
+                    //两张表都写入成功，发送短信
+                    if ($res1 & $res2){
+                        $doctor_class = new DoctorController();
+                        $content = $doctor_class->configAward($doctor['wanted_award']);
+                        $sms_res = SmsController::sendNotice($doctor['phone_number'],$content);
+                        Log::info('审核短信发送状态是：'.$sms_res);
+                    }
                 }
 
             });
