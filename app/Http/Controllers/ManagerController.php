@@ -13,10 +13,14 @@ use App\Http\Requests\Manager\ManagerEditRequest;
 use App\Http\Requests\Manager\ManagerListRequest;
 use App\Http\Requests\Manager\ManagerLoginRequest;
 use App\Http\Requests\Manager\ManagerLogoutRequest;
+use App\Http\Requests\Manager\SignUpInfoReviewListRequest;
+use App\Http\Requests\Manager\SignUpInfoReviewRequest;
 use App\Http\Requests\Manager\TimeSettingRequest;
+use App\Models\DoctorSignUp\DoctorModel;
 use App\Models\Manager\ExpertModel;
 use App\Models\Manager\ManagerModel;
 use App\Models\Manager\SettingModel;
+use App\Models\Manager\SignUpInfoReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -430,6 +434,62 @@ class ManagerController extends Controller
         }
 
         return Common::jsonFormat('200','获取成功',$expert);
+    }
+
+    /**
+     * @param SignUpInfoReviewListRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 审核内容列表
+     */
+    public function signUpInfoReviewList(SignUpInfoReviewListRequest $request)
+    {
+        $info = $request->all();
+
+        $review = SignUpInfoReview::where('info_id',$info['info_id'])->orderBy('created_at','desc')->get();
+        foreach ($review as &$v){
+            $v['operate_person'] = $v->manager['nickname'];
+        }
+
+        return Common::jsonFormat('200','获取成功',$review);
+    }
+
+    /**
+     * @param SignUpInfoReviewRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * 报名审核
+     */
+    public function signUpInfoReview(SignUpInfoReviewRequest $request)
+    {
+        $info = $request->all();
+
+        try{
+            $cookie_manager_token = $request->cookie('manager_token');
+            $session_manager_id = $request->session()->get($cookie_manager_token);
+            DB::transaction(function () use ($info,$session_manager_id) {
+
+                foreach ($info['info_id'] as $v){
+                    //在报名信息审核表 中新增数据
+                    $review = new SignUpInfoReview();
+                    $review->user_id = substr($session_manager_id,13);
+                    $review->info_id = $v;
+                    $review->status = $info['status'];
+                    $review->content = $info['content'];
+                    $review->review_way = $info['review_way'];
+                    $review->save();
+
+                    //更新doctor表中的status值
+                    $doctor = DoctorModel::find($v);
+                    $doctor->status = $info['status'];
+                    $doctor->save();
+                }
+
+            });
+
+            return Common::jsonFormat('200','审核成功');
+        } catch (\Exception $e){
+            Log::error($e);
+            return Common::jsonFormat('500','审核失败');
+        }
     }
 
     /**

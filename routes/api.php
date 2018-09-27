@@ -63,8 +63,8 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
 
     Route::post('signUpInfoDetail','DoctorController@signUpInfoDetail');
     Route::post('signUpList','DoctorController@signUpList');
-    Route::post('signUpInfoReview','DoctorController@signUpInfoReview');
-    Route::post('signUpInfoReviewList','DoctorController@signUpInfoReviewList');
+    Route::post('signUpInfoReview','ManagerController@signUpInfoReview');
+    Route::post('signUpInfoReviewList','ManagerController@signUpInfoReviewList');
 
     Route::post('expertList','ManagerController@expertList');
     Route::post('expertAdd','ManagerController@expertAdd');
