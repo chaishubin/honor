@@ -83,9 +83,8 @@ Route::post('timeSettingList','ManagerController@timeSettingList');
 Route::any('getWechatConfig','Common@getWechatConfig');
 
 Route::group(['prefix' => '/vote'], function () {
-    Route::post('userVote', 'VoteController@userVote');
-    Route::post('checkExpert', 'VoteController@checkExpert');
-    Route::post('candidateVoteList', 'VoteController@candidateVoteList');
+    Route::post('userVote', 'VoteController@userVote')->middleware('checkUserLogin');
+    Route::post('candidateVoteList', 'VoteController@candidateVoteList')->middleware('checkUserLogin');
     Route::any('expertAwardListWithVotes', 'VoteController@expertAwardListWithVotes')->middleware('checkUserLogin');
 });
 
