@@ -121,6 +121,7 @@ class VoteController extends Controller
 
         $result = [];
         $doctor->chunk(100, function($res) use (&$result) {
+            $doctor_class = new DoctorController();
             //遍历把redis中的票数信息插入每条记录中
             foreach ($res as $k => $v){
                 $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
@@ -132,7 +133,16 @@ class VoteController extends Controller
                 $result[$k]['name'] = $v['name'];
                 $result[$k]['hospital_name'] = $v['hospital_name'];
                 $result[$k]['department'] = $v['department'];
-                $result[$k]['job_title'] = $v['job_title'];
+
+                //拼接号职称的 全称
+                $job_title = json_decode($v['job_title'], true);
+                $first = $doctor_class->configJobTitle($job_title['first']);
+                $second = '';
+                if ($job_title['second']){
+                    $second = '·'.$doctor_class->configJobTitle($job_title['second']);
+                }
+
+                $result[$k]['job_title'] = $first.$second;
                 $result[$k]['public_votes'] = $public_votes;
                 $result[$k]['expert_votes'] = $expert_votes;
                 $result[$k]['score'] = $score;
