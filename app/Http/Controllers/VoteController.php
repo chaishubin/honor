@@ -139,7 +139,7 @@ class VoteController extends Controller
                 $first = $doctor_class->configJobTitle($job_title['first']);
                 $second = '';
                 if ($job_title['second']){
-                    $second = '·'.$doctor_class->configJobTitle($job_title['second']);
+                    $second = ' · '.$doctor_class->configJobTitle($job_title['second']);
                 }
 
                 $result[$k]['job_title'] = $first.$second;
