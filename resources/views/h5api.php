@@ -287,6 +287,16 @@ h2{ margin:0; padding:25px 0; }
                     </form>
                 </div>
                 <div class="item-doc">
+                    <h5>候选人详情: <small class="link">/api/vote/signUpInfoDetail</small></h5>
+                    <form role="form" action="/api/vote/signUpInfoDetail">
+                        <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                        <div class="input-group">
+                            <span class="input-group-addon"><em>*</em>id</span><input name="id" placeholder="候选人id" value="" type="text" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <div class="item-doc">
                     <h5>用户未登录的投票列表: <small class="link">/api/vote/candidateVoteList</small></h5>
                     <form role="form" action="/api/vote/candidateVoteList">
                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
