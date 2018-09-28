@@ -49,7 +49,8 @@ h2{ margin:0; padding:25px 0; }
                     <p>
                         [code]  <br />
                         =200  &nbsp;&nbsp;   ok<br />
-                        =500   &nbsp;&nbsp;     错误
+                        =500   &nbsp;&nbsp;     错误<br />
+                        =505       token问题，此状态需要有清空cookie的操作
                     </p>
 
                 </div>

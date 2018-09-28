@@ -23,7 +23,7 @@ class CheckUserIsLogin
 
         if (!$cookie_token || !$session_token){
             Log::info('用户尝试非法登录，其尝试的user_token是：'.$cookie_token);
-            return Common::jsonFormat('500','server reject !');
+            return Common::jsonFormat('505','server reject !');
         }
 
         $user = UserModel::where('access_token',$cookie_token)->first();
