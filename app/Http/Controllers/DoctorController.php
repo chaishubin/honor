@@ -257,6 +257,8 @@ class DoctorController extends Controller
         }
 
         $data = $check;
+
+        $data['job_title'] = $this->configJobTitle($check['first']).' '.$this->configJobTitle($check['second']);
         $data['doctor_other_info'] = json_decode($data['doctor_other_info'],true);
 
         return Common::jsonFormat('200','获取成功',$check);
