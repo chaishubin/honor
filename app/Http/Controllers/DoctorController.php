@@ -72,16 +72,6 @@ class DoctorController extends Controller
 
     }
 
-    public function userSignUpList(Request $request)
-    {
-        $signup_query = DoctorModel::where('phone_number',$request['phone_number'])
-            ->orderBy('updated_at','desc')
-            ->get(['id','wanted_award','status']);
-
-//        foreach ($signup_query as &$v){
-//            $v['wanted_award'] =
-//        }
-    }
 
     /**
      * @param SignUpRequest $request
@@ -349,6 +339,15 @@ class DoctorController extends Controller
                 $flag = $request->session()->get('sms_flag');
 
                 if ($flag === 'true'){
+                    //检测是不是专家号
+                    $vote_class = new VoteController();
+                    $check_expert = $vote_class->checkExpert($info['phone_number']);
+                    if ($check_expert === 'pass'){
+                        $user_type = 2;
+                    }else{
+                        $user_type = 1;
+                    }
+
                     //获取session中的sms_code
                     $session_sms_code = $request->session()->get('sms_code');
                     //对比短信验证码是否正确
@@ -376,7 +375,8 @@ class DoctorController extends Controller
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha');
 
-                                return Common::jsonFormat('200','注册成功',$user_token);
+                                $data = ['user_token' => $user_token, 'user_type' => $user_type];
+                                return Common::jsonFormat('200','注册成功',$data);
                             } catch (\Exception $e){
                                 Log::error($e);
 
@@ -400,7 +400,9 @@ class DoctorController extends Controller
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
                                 $request->session()->forget('captcha');
 
-                                return Common::jsonFormat('200','登录成功',$user_token);
+                                $data = ['user_token' => $user_token, 'user_type' => $user_type];
+
+                                return Common::jsonFormat('200','登录成功',$data);
                             } catch (\Exception $e){
                                 Log::error($e);
                                 //通过图片验证码之后就清除其session，防止在下一次http请求仍然生效
