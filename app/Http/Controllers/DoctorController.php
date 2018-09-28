@@ -230,6 +230,8 @@ class DoctorController extends Controller
                 }
             }
 
+            $sign_up->status = 1; //修改后重新提交后，将状态改为待审核 -》 报名状态,1待审核，2已通过，3未通过
+
             $sign_up->save();
 
             return Common::jsonFormat('200','修改成功');
