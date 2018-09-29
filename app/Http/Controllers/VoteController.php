@@ -80,16 +80,24 @@ class VoteController extends Controller
                         Redis::hincrby('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],'public_votes',1);
                     }
                 }else{ //不存在，进行新增操作
-                    if ($voters_type == 2){ //专家
-                        $public_votes = 0;
-                        $expert_votes = 1;
-                    }else{ // 大众
-                        $public_votes = 1;
-                        $expert_votes = 0;
+                    $vote = VoteModel::where(['candidate_id' => $info['candidate_id'], 'award_id' => $info['award_id']])->first();
+                    //此处是为了应对，redis中的数据丢失，但仍在表中备份的情况，此时把数据库中的数据再写入redis中
+                    if ($vote){
+                        //存入hash类型的redis
+                        Redis::hmset('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],['public_votes' => $vote['public_votes'], 'expert_votes' => $vote['expert_votes']]);
+                    }else{
+                        if ($voters_type == 2){ //专家
+                            $public_votes = 0;
+                            $expert_votes = 1;
+                        }else{ // 大众
+                            $public_votes = 1;
+                            $expert_votes = 0;
+                        }
+
+                        //存入hash类型的redis
+                        Redis::hmset('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],['public_votes' => $public_votes, 'expert_votes' => $expert_votes]);
                     }
 
-                    //存入hash类型的redis
-                    Redis::hmset('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],['public_votes' => $public_votes, 'expert_votes' => $expert_votes]);
                 }
 //                $res = Redis::hgetall('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id']);
 //                dd($res);die;
