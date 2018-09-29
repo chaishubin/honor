@@ -503,6 +503,34 @@ class ManagerController extends Controller
     }
 
     /**
+     * @return \Illuminate\Http\JsonResponse
+     * 数据统计
+     */
+    public function statisticalGraph()
+    {
+        $today_date_time = date('Y-m-d H:i:s',strtotime('today'));
+        $tomorrow_date_time = date('Y-m-d H:i:s',strtotime('tomorrow'));
+        $cur_timestamp = time();
+
+        $doctor = new DoctorModel();
+        $doctor_count = $doctor->count(); //报名总数
+        $doctor_check_pending_count = $doctor->where('status',1)->count(); //待审核总数
+        $doctor_check_pass_count = $doctor->where('status',2)->count(); //已通过总数
+        $doctor_check_reject_count = $doctor->where('status',3)->count(); //未通过总数
+        $doctor_today_avg_count = $doctor->whereBetween('created_at',[$today_date_time,$tomorrow_date_time])->count(); //日平均报名数
+
+        $data = [
+            'doctor_count' => $doctor_count,
+            'doctor_check_pending_count' => $doctor_check_pending_count,
+            'doctor_check_pass_count' => $doctor_check_pass_count,
+            'doctor_check_reject_count' => $doctor_check_reject_count,
+            'doctor_today_avg_count' => $doctor_today_avg_count,
+        ];
+
+        return Common::jsonFormat('200','获取成功',$data);
+    }
+
+    /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      * 测试环境 设置cookie

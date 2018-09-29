@@ -389,6 +389,16 @@
                         </form>
                     </div>
                 </li>
+                <li>
+                    <h3>数据统计</h3>
+                    <div class="item-doc">
+                        <h5>统计数据列表: <small class="link">/api/manager/statisticalGraph</small></h5>
+                        <form role="form" action="/api/manager/statisticalGraph">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div>
 

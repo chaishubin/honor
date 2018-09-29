@@ -75,6 +75,7 @@ Route::group(['middleware' => ['checkManagerLogin'], 'prefix' => '/manager'], fu
     Route::post('candidateVoteList', 'VoteController@candidateVoteList');
 
     Route::post('timeSetting','ManagerController@timeSetting');
+    Route::post('statisticalGraph', 'ManagerController@statisticalGraph');
 });
 
 Route::post('/doctor/configAward','DoctorController@configAward');
@@ -100,6 +101,7 @@ Route::group(['prefix' => '/vote'], function () {
 
 
 Route::any('export', 'ExcelController@export');
+
 
 
 
