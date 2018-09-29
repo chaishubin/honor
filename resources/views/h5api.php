@@ -38,7 +38,7 @@ h2{ margin:0; padding:25px 0; }
 <body>
 <div class="content">
 
-<h2 class="text-center">荣耀医者 - H5 接口文档s</h2>
+<h2 class="text-center">荣耀医者 - H5 接口文档</h2>
 
 <div class="row">
     <div class="col-md-3">
