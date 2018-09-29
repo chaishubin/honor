@@ -485,7 +485,7 @@ class ManagerController extends Controller
                     $res2 = $doctor->save();
 
                     //两张表都写入成功，发送短信
-                    if ($res1 & $res2){
+                    if ($info['status'] == 2 && $res1 & $res2){
                         $doctor_class = new DoctorController();
                         $content = $doctor_class->configAward($doctor['wanted_award']);
                         $sms_res = SmsController::sendNotice($doctor['phone_number'],$content);
