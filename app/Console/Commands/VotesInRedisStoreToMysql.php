@@ -42,40 +42,43 @@ class VotesInRedisStoreToMysql extends Command
     {
         try{
             $info = Redis::keys('rongyao2018:vote:*');
-            foreach ($info as $k => $v) {
-                $vote = new VoteModel();
+            if ($info){
+                foreach ($info as $k => $v) {
+                    $vote = new VoteModel();
 
-                //正则匹配取到id和奖项id
-                preg_match('/^rongyao2018:vote:([\d]+?):([\d]+?)$/', $v, $match);
+                    //正则匹配取到id和奖项id
+                    preg_match('/^rongyao2018:vote:([\d]+?):([\d]+?)$/', $v, $match);
 
-                //如果没有匹配到这两个id，说明存入redis的数据错误，就跳出循环
-                if (is_null($match[1]) || is_null($match[2])) {
-                    Log::warning('redis中存储的投票信息有误，其key为：' . $v);
-                    Log::warning('正则匹配到的candidate_id为：' . $match[1] . ';award_id为：' . $match[2]);
-                    continue;
-                }
-                $keys_value = Redis::hgetall($v);
-                $candidate_id = $match[1];
-                $award_id = $match[2];
-                $score = $keys_value['public_votes'] + $keys_value['expert_votes'] * 4;
+                    //如果没有匹配到这两个id，说明存入redis的数据错误，就跳出循环
+                    if (is_null($match[1]) || is_null($match[2])) {
+                        Log::warning('redis中存储的投票信息有误，其key为：' . $v);
+                        Log::warning('正则匹配到的candidate_id为：' . $match[1] . ';award_id为：' . $match[2]);
+                        continue;
+                    }
+                    $keys_value = Redis::hgetall($v);
+                    $candidate_id = $match[1];
+                    $award_id = $match[2];
+                    $score = $keys_value['public_votes'] + $keys_value['expert_votes'] * 4;
 
-                $check = $vote->where(['candidate_id' => $candidate_id, 'award_id' => $award_id])->first();
+                    $check = $vote->where(['candidate_id' => $candidate_id, 'award_id' => $award_id])->first();
 
-                if ($check) { //更新操作
-                    $check->score = $score;
-                    $check->public_votes = $keys_value['public_votes'];
-                    $check->expert_votes = $keys_value['expert_votes'];
-                    $check->save();
+                    if ($check) { //更新操作
+                        $check->score = $score;
+                        $check->public_votes = $keys_value['public_votes'];
+                        $check->expert_votes = $keys_value['expert_votes'];
+                        $check->save();
 
-                } else { //新增操作
-                    $vote->candidate_id = $candidate_id;
-                    $vote->award_id = $award_id;
-                    $vote->score = $score;
-                    $vote->public_votes = $keys_value['public_votes'];
-                    $vote->expert_votes = $keys_value['expert_votes'];
-                    $vote->save();
+                    } else { //新增操作
+                        $vote->candidate_id = $candidate_id;
+                        $vote->award_id = $award_id;
+                        $vote->score = $score;
+                        $vote->public_votes = $keys_value['public_votes'];
+                        $vote->expert_votes = $keys_value['expert_votes'];
+                        $vote->save();
+                    }
                 }
             }
+
         } catch (\Exception $e){
             Log::info('redis写入mysql失败');
             Log::error($e);
