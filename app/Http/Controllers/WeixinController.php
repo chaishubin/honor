@@ -69,13 +69,10 @@ class WeixinController extends Controller
         $jsapi_ticket = $this->getJsapiTicket();    // 注意 URL 一定要动态获取，不能 hardcode.
 //        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
         $url = $rongyao_url;
-        Log::info('nurl'.$url);
+
         $noncestr = Common::randomStr('32');
         $timestamp = time();
 
-        Log::info('n$jsapi_ticket'.$jsapi_ticket);
-        Log::info('n$noncestr'.$noncestr);
-        Log::info('n$timestamp'.$timestamp);
         $string1 = "jsapi_ticket={$jsapi_ticket}&noncestr={$noncestr}&timestamp={$timestamp}&url={$url}";
         $signature = sha1($string1);
         $signPackage = array(
