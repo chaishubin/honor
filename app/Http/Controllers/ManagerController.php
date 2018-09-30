@@ -527,6 +527,10 @@ class ManagerController extends Controller
             'doctor_today_avg_count' => $doctor_today_avg_count,
         ];
 
+//        $doctor_day_avg_count = function ($date_range) use ($doctor) {
+//            $doctor->whereBetween('created_at',[$date_range['start'],$date_range['end']])->get(); //日平均报名数
+//        };
+
         return Common::jsonFormat('200','获取成功',$data);
     }
 
