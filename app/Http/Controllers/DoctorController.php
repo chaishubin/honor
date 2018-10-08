@@ -60,8 +60,16 @@ class DoctorController extends Controller
         $sign_up = $signup_query->offset($offset)->limit($limit)->get();
 
         foreach ($sign_up as &$v){
+
             $job_title = json_decode($v['job_title'],true);
-            $v['job_title'] = $this->configJobTitle($job_title['first']).' '.$this->configJobTitle($job_title['second']);
+            $tmpTitle = "";
+            if(isset($job_title['first'])){
+                $tmpTitle=$this->configJobTitle($job_title['first']);
+            }
+            if(isset($job_title['second'])){
+                $tmpTitle=$tmpTitle.' '.$this->configJobTitle($job_title['second']);
+            }
+            $v['job_title'] = $tmpTitle;
             $v['wanted_award'] = $this->configAward($v['wanted_award']);
             $v['doctor_other_info'] = json_decode($v['doctor_other_info'],true);
         }
@@ -254,8 +262,15 @@ class DoctorController extends Controller
         $data = $check;
 
         $job_title = json_decode($check['job_title'],true);
+        if(isset($job_title['first'])){
+            $tmpTitle=$this->configJobTitle($job_title['first']);
+        }
+        if(isset($job_title['second'])){
+            $tmpTitle=$tmpTitle.' '.$this->configJobTitle($job_title['second']);
+        }
+        $data['job_title'] = $tmpTitle;
 
-        $data['job_title'] = $this->configJobTitle($job_title['first']).' '.$this->configJobTitle($job_title['second']);
+
         $data['doctor_other_info'] = json_decode($data['doctor_other_info'],true);
 
         return Common::jsonFormat('200','获取成功',$check);
@@ -574,6 +589,7 @@ class DoctorController extends Controller
      */
     public function configJobTitle($id='null')
     {
+
         $info = [
             ['id' => '101', 'name' => '主任医师'],
             ['id' => '102', 'name' => '副主任医师'],
