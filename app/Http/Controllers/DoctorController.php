@@ -262,6 +262,7 @@ class DoctorController extends Controller
         $data = $check;
 
         $job_title = json_decode($check['job_title'],true);
+        $tmpTitle="";
         if(isset($job_title['first'])){
             $tmpTitle=$this->configJobTitle($job_title['first']);
         }
