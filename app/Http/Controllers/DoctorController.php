@@ -670,5 +670,56 @@ class DoctorController extends Controller
         }
     }
 
+    public function demo(Request $request)
+    {
+        $info = $request->all();
+
+        $result =  array (
+                array (
+                    'id' => 44,
+                    'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A1/ChvHbFufSUCAbiLnAABYfAakJPk3705826',
+                    'name' => 'xin',
+                    'hospital_name' => '澶╂触寤绉澶у婊寤棰',
+                    'department' => 'dfgdf',
+                    'job_title' => '涓讳换寤甯 路 骀',
+                    'public_votes' => '0',
+                    'expert_votes' => '1',
+                    'score' => 4,
+                    'province' => '',
+                ),
+                array (
+                'id' => 20,
+                'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A0/ChvHbFuY2AmAVPq2AAAGI7CLLVo7966614',
+                'name' => '浜娴',
+            ),
+            array (
+                'id' => 21,
+                'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A0/ChvHbFuY2AmAVPq2AAAGI7CLLVo7966614',
+                'name' => '浜娴',
+            ),
+            array (
+                'id' => 22,
+                'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A0/ChvHbFuY2AmAVPq2AAAGI7CLLVo7966614',
+                'name' => '浜娴',
+            ),
+            array (
+                'id' => 23,
+                'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A0/ChvHbFuY2AmAVPq2AAAGI7CLLVo7966614',
+                'name' => '浜娴',
+            ),
+            array (
+                'id' => 24,
+                'full_face_photo' => 'http://files.huobanys.com/group1/M00/00/A0/ChvHbFuY2AmAVPq2AAAGI7CLLVo7966614',
+                'name' => '浜娴',
+            ),
+        );
+        $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 2;
+        $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
+
+        $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
+
+        return Common::jsonFormat('200', '获取成功',$data);
+    }
+
 
 }
