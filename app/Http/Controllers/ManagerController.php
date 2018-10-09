@@ -107,10 +107,15 @@ class ManagerController extends Controller
                 return Common::jsonFormat('500','此管理员不存在哟');
             }
 
+
             if (isset($info['nickname']) && !is_null($info['nickname'])){
                 $manager->nickname = $info['nickname'];
             }
             if (isset($info['account']) && !is_null($info['account'])){
+                $result = ManagerModel::query()->where('account',$info['account'])->where('id','!=',$info['id'])->first();
+                if ($result){
+                    return Common::jsonFormat('500','该管理员账号已存在');
+                }
                 $manager->account = $info['account'];
             }
             if (isset($info['password']) && !is_null($info['password'])){
