@@ -245,7 +245,7 @@ class VoteController extends Controller
         //对数据按照public_votes或score
         $sort_field = array_column($result,'public_votes');
         array_multisort($sort_field,SORT_DESC,$result);
-        Log::info($result);
+        Log::error('哈哈哈哈');
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
