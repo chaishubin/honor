@@ -179,6 +179,7 @@ class VoteController extends Controller
 
         $data['total'] = count($result);
         $data['data'] = array_slice($result,$offset,$limit);
+        $data['params'] = $result;
         //$data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
         return Common::jsonFormat('200', '获取成功',$data);
     }
