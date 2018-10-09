@@ -150,9 +150,12 @@ class VoteController extends Controller
 
                 //拼接号职称的 全称
                 $job_title = json_decode($v['job_title'], true);
-                $first = $doctor_class->configJobTitle($job_title['first']);
+                $first = '';
+                if (isset($job_title['first'])){
+                    $first = $doctor_class->configJobTitle($job_title['first']);
+                }
                 $second = '';
-                if ($job_title['second']){
+                if (isset($job_title['second'])){
                     $second = ' · '.$doctor_class->configJobTitle($job_title['second']);
                 }
 

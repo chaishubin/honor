@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /public/captcha.jpg
+/config/database.php
 /storage/*.key
 /vendor
 /.idea
