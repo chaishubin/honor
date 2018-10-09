@@ -177,7 +177,7 @@ class VoteController extends Controller
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
 
-        $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit), 'params'=>$result];
+        $data = ['total' => count($result), 'res' => array_slice($result,$offset,$limit), 'params'=>$result];
 
         return Common::jsonFormat('200', '获取成功',$data);
     }
