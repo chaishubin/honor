@@ -382,6 +382,11 @@ class ManagerController extends Controller
                 return Common::jsonFormat('500','该专家不存在哟');
             }
 
+            $result = ExpertModel::query()->where('phone_number',$info['phone_number'])->first();
+            if ($result){
+                return Common::jsonFormat('500','该手机号已注册');
+            }
+
             if (isset($info['phone_number']) && !is_null($info['phone_number'])){
                 $expert->phone_number = $info['phone_number'];
             }
