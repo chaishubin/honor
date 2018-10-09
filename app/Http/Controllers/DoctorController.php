@@ -97,6 +97,10 @@ class DoctorController extends Controller
             if ($check){
                 return Common::jsonFormat('500','此用户已参加报名');
             }
+            $job_title = json_decode($info['job_title'],true);
+            if (!isset($job_title['first'])){
+                return Common::jsonFormat('500','缺少first参数');
+            }
 
             $doctor = new DoctorModel();
             $doctor->name = $info['name'];
