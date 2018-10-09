@@ -245,13 +245,13 @@ class VoteController extends Controller
         //对数据按照public_votes或score
         $sort_field = array_column($result,'public_votes');
         array_multisort($sort_field,SORT_DESC,$result);
-        \Log::INFO($result);
+        Log::info($result);
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
 
         $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
-        \Log::INFO($data);
+        Log::info($data);
         return Common::jsonFormat('200', '获取成功',$data);
     }
 
