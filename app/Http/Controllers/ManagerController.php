@@ -108,13 +108,8 @@ class ManagerController extends Controller
             }
 
             $result = ManagerModel::query()->where('account',$info['account'])->where('id','!=',$info['id'])->first();
-            $aa = $result->toArray();
-            \Log::info($aa);
             if ($result){
-                \Log::info('ok');
                 return Common::jsonFormat('500','该管理员账号已存在');
-            }else{
-                \Log::info('no');
             }
 
             if (isset($info['nickname']) && !is_null($info['nickname'])){
