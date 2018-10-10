@@ -354,7 +354,7 @@ class ManagerController extends Controller
         $info = $request->all();
 
         try {
-            $check = ExpertModel::where('phone_number', $info['phone_number'])->orWhere('name', $info['name'])->first();
+            $check = ExpertModel::where('phone_number', $info['phone_number'])->first();
             if ($check) {
                 return Common::jsonFormat('500', '此专家已经存在哟');
             }
