@@ -102,9 +102,11 @@ class VoteController extends Controller
 //                dd($res);die;
                 return Common::jsonFormat('200','投票成功');
             }
+            \Log::info('one');
             return Common::jsonFormat('500','投票失败');
         } catch (\Exception $e){
             Log::error($e);
+            \Log::info('two');
             return Common::jsonFormat('500','投票失败');
         }
     }
