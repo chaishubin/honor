@@ -40,25 +40,25 @@ class ManagerController extends Controller
 
         $manager_query = ManagerModel::query();
 
-        if (!is_null($info['nickname'])){
-            $manager_query->where('nickname','like','%'.$info['nickname'].'%');
+        if (!is_null($info['nickname'])) {
+            $manager_query->where('nickname', 'like', '%' . $info['nickname'] . '%');
         }
-        if (!is_null($info['account'])){
-            $manager_query->where('account',$info['account']);
+        if (!is_null($info['account'])) {
+            $manager_query->where('account', $info['account']);
         }
-        if (!is_null($info['role'])){
-            $manager_query->where('role',$info['role']);
+        if (!is_null($info['role'])) {
+            $manager_query->where('role', $info['role']);
         }
 
         $limit = !is_null($info['length']) ? $info['length'] : 10;
-        $offset = !is_null($info['cur_page']) ? ($info['cur_page']-1)*$limit : 0;
+        $offset = !is_null($info['cur_page']) ? ($info['cur_page'] - 1) * $limit : 0;
         $total = $manager_query->count();
 
-        $res = $manager_query->offset($offset)->limit($limit)->orderBy('created_at','desc')->get(['id','nickname','account','role','note']);
+        $res = $manager_query->offset($offset)->limit($limit)->orderBy('created_at', 'desc')->get(['id', 'nickname', 'account', 'role', 'note']);
 
         $data = ['total' => $total, 'data' => $res];
 
-        return Common::jsonFormat('200','获取成功',$data);
+        return Common::jsonFormat('200', '获取成功', $data);
     }
 
     /**
@@ -70,11 +70,11 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
-            $check = ManagerModel::where('nickname',$info['nickname'])->orWhere('account',$info['account'])->first();
+        try {
+            $check = ManagerModel::where('nickname', $info['nickname'])->orWhere('account', $info['account'])->first();
 
-            if ($check){
-                return Common::jsonFormat('500','此管理员已经存在哟');
+            if ($check) {
+                return Common::jsonFormat('500', '此管理员已经存在哟');
             }
 
             $manager = new ManagerModel();
@@ -85,11 +85,11 @@ class ManagerController extends Controller
             $manager->note = $info['note'];
             $manager->save();
 
-            return Common::jsonFormat('200','添加成功');
+            return Common::jsonFormat('200', '添加成功');
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','添加失败');
+            return Common::jsonFormat('500', '添加失败');
         }
     }
 
@@ -101,37 +101,37 @@ class ManagerController extends Controller
     public function managerEdit(ManagerEditRequest $request)
     {
         $info = $request->all();
-        try{
+        try {
             $manager = ManagerModel::find($info['id']);
-            if (!$manager){
-                return Common::jsonFormat('500','此管理员不存在哟');
+            if (!$manager) {
+                return Common::jsonFormat('500', '此管理员不存在哟');
             }
 
-            $result = ManagerModel::query()->where('account',$info['account'])->where('id','!=',$info['id'])->first();
-            if ($result){
-                return Common::jsonFormat('500','该管理员账号已存在');
+            $result = ManagerModel::query()->where('account', $info['account'])->where('id', '!=', $info['id'])->first();
+            if ($result) {
+                return Common::jsonFormat('500', '该管理员账号已存在');
             }
 
-            if (isset($info['nickname']) && !is_null($info['nickname'])){
+            if (isset($info['nickname']) && !is_null($info['nickname'])) {
                 $manager->nickname = $info['nickname'];
             }
-            if (isset($info['account']) && !is_null($info['account'])){
+            if (isset($info['account']) && !is_null($info['account'])) {
                 $manager->account = $info['account'];
             }
-            if (isset($info['password']) && !is_null($info['password'])){
+            if (isset($info['password']) && !is_null($info['password'])) {
                 $manager->password = Common::mymd5_4($info['password']);
             }
-            if (isset($info['role']) && !is_null($info['role'])){
+            if (isset($info['role']) && !is_null($info['role'])) {
                 $manager->role = $info['role'];
             }
-            if (isset($info['note']) && !is_null($info['note'])){
+            if (isset($info['note']) && !is_null($info['note'])) {
                 $manager->note = $info['note'];
             }
             $manager->save();
-            return Common::jsonFormat('200','修改成功');
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '修改成功');
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','修改失败');
+            return Common::jsonFormat('500', '修改失败');
         }
     }
 
@@ -147,10 +147,10 @@ class ManagerController extends Controller
         $manager = ManagerModel::find($info['id'])->toArray();
         unset($manager['password']);
         unset($manager['access_token']);
-        if (!$manager){
-            return Common::jsonFormat('500','此管理员不存在哟');
+        if (!$manager) {
+            return Common::jsonFormat('500', '此管理员不存在哟');
         }
-        return Common::jsonFormat('200','获取成功',$manager);
+        return Common::jsonFormat('200', '获取成功', $manager);
     }
 
     /**
@@ -162,19 +162,19 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
-            foreach ($info['id'] as $v){
+        try {
+            foreach ($info['id'] as $v) {
                 $check = ManagerModel::find($v);
-                if (!$check){
-                    return Common::jsonFormat('500','删除失败，部分管理员不存在哟');
+                if (!$check) {
+                    return Common::jsonFormat('500', '删除失败，部分管理员不存在哟');
                 }
             }
-            $res = ManagerModel::whereIn('id',$info['id'])->delete();
+            $res = ManagerModel::whereIn('id', $info['id'])->delete();
 
-            return Common::jsonFormat('200','删除成功');
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '删除成功');
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','删除失败');
+            return Common::jsonFormat('500', '删除失败');
         }
     }
 
@@ -189,11 +189,11 @@ class ManagerController extends Controller
         $account = $info['account'];
         $password = Common::mymd5_4($info['password']);
 
-        try{
-            $manager = ManagerModel::where([['nickname' , $account], ['password' , $password]])->orWhere([['account' , $account], ['password' , $password]])->first();
+        try {
+            $manager = ManagerModel::where([['nickname', $account], ['password', $password]])->orWhere([['account', $account], ['password', $password]])->first();
 
-            if (!$manager){
-                return Common::jsonFormat('500','用户名或密码不正确');
+            if (!$manager) {
+                return Common::jsonFormat('500', '用户名或密码不正确');
             }
 
             //更新token
@@ -201,16 +201,16 @@ class ManagerController extends Controller
             $manager->save();
 
             //存入session
-            $request->session()->put($manager_token,'manager_token'.$manager['id']);
+            $request->session()->put($manager_token, 'manager_token' . $manager['id']);
 
             $data['nickname'] = $manager['nickname'];
             $data['role'] = $manager['role'];
             $data['manager_token'] = $manager_token;
 
-            return Common::jsonFormat('200','登录成功',$data);
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '登录成功', $data);
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','登录失败');
+            return Common::jsonFormat('500', '登录失败');
         }
     }
 
@@ -241,9 +241,9 @@ class ManagerController extends Controller
             $manager->save();
 
             return Common::jsonFormat('200', '退出成功');
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','退出失败');
+            return Common::jsonFormat('500', '退出失败');
         }
     }
 
@@ -256,26 +256,26 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
-            $setting = SettingModel::where('name','time_limit')->first();
+        try {
+            $setting = SettingModel::where('name', 'time_limit')->first();
 
-            if ($setting){ //如果查找到了，进行更新操作
+            if ($setting) { //如果查找到了，进行更新操作
                 $setting->value = $info['time_limit'];
                 $setting->save();
 
-                return Common::jsonFormat('200','设置成功');
-            }else{ // 未查到，进行插入操作
+                return Common::jsonFormat('200', '设置成功');
+            } else { // 未查到，进行插入操作
                 $setting = new SettingModel();
                 $setting->name = 'time_limit';
                 $setting->value = $info['time_limit'];
                 $setting->save();
 
-                return Common::jsonFormat('200','设置成功');
+                return Common::jsonFormat('200', '设置成功');
             }
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','设置失败');
+            return Common::jsonFormat('500', '设置失败');
         }
     }
 
@@ -286,8 +286,8 @@ class ManagerController extends Controller
      */
     public function timeSettingList(Request $request)
     {
-        $setting = SettingModel::where('name','time_limit')->first();
-        $data = json_decode($setting['value'],true);
+        $setting = SettingModel::where('name', 'time_limit')->first();
+        $data = json_decode($setting['value'], true);
 
         $cur_time = time();
         $sign_up_start_time = strtotime($data['sign_up_time']['start']);
@@ -296,23 +296,23 @@ class ManagerController extends Controller
         $vote_end_time = strtotime($data['vote_time']['end']);
 
 
-        if ($cur_time >= $sign_up_start_time && $cur_time < $sign_up_end_time){
+        if ($cur_time >= $sign_up_start_time && $cur_time < $sign_up_end_time) {
             $data['can_sign_up'] = 1; //可报名
-        }elseif ($cur_time < $sign_up_start_time){
+        } elseif ($cur_time < $sign_up_start_time) {
             $data['can_sign_up'] = 2; //未开始
-        }else{
+        } else {
             $data['can_sign_up'] = 3; //已过期
         }
 
-        if ($cur_time >= $vote_start_time && $cur_time < $vote_end_time){
+        if ($cur_time >= $vote_start_time && $cur_time < $vote_end_time) {
             $data['can_vote'] = 1; //可投票
-        }elseif ($cur_time < $vote_start_time){
+        } elseif ($cur_time < $vote_start_time) {
             $data['can_vote'] = 2; //未开始
-        }else{
+        } else {
             $data['can_vote'] = 3; //已结束
         }
 
-        return Common::jsonFormat('200','获取成功',$data);
+        return Common::jsonFormat('200', '获取成功', $data);
     }
 
     /**
@@ -325,23 +325,23 @@ class ManagerController extends Controller
         $info = $request->all();
 
         $expert = ExpertModel::query();
-        $expert->where('status',1);
-        if (isset($info['phone_number']) && !is_null($info['phone_number'])){
+        $expert->where('status', 1);
+        if (isset($info['phone_number']) && !is_null($info['phone_number'])) {
             $expert->where('phone_number', $info['phone_number']);
         }
-        if (isset($info['name']) && !is_null($info['name'])){
+        if (isset($info['name']) && !is_null($info['name'])) {
             $expert->where('name', $info['name']);
         }
 
         $total = $expert->count();
         $limit = isset($info['length']) && !is_null($info['length']) ? $info['length'] : 10;
-        $offset = isset($info['cur_page']) && !is_null($info['cur_page']) ? ($info['cur_page']-1)*$limit : 0;
+        $offset = isset($info['cur_page']) && !is_null($info['cur_page']) ? ($info['cur_page'] - 1) * $limit : 0;
 
-        $res = $expert->offset($offset)->limit($limit)->orderBy('created_at','desc')->get();
+        $res = $expert->offset($offset)->limit($limit)->orderBy('created_at', 'desc')->get();
 
-        $data = ['total'=>$total, 'data'=>$res];
+        $data = ['total' => $total, 'data' => $res];
 
-        return Common::jsonFormat('200','获取成功',$data);
+        return Common::jsonFormat('200', '获取成功', $data);
     }
 
     /**
@@ -353,10 +353,10 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
-            $check = ExpertModel::where('phone_number', $info['phone_number'])->orWhere('name',$info['name'])->first();
-            if ($check){
-                return Common::jsonFormat('500','此专家已经存在哟');
+        try {
+            $check = ExpertModel::where('phone_number', $info['phone_number'])->orWhere('name', $info['name'])->first();
+            if ($check) {
+                return Common::jsonFormat('500', '此专家已经存在哟');
             }
 
             $expert = new ExpertModel();
@@ -365,11 +365,11 @@ class ManagerController extends Controller
             $expert->status = 1; //默认1，有效
             $expert->save();
 
-            return Common::jsonFormat('200','添加成功');
+            return Common::jsonFormat('200', '添加成功');
 
-        } catch (\Exception $e){
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','添加失败');
+            return Common::jsonFormat('500', '添加失败');
         }
     }
 
@@ -381,28 +381,28 @@ class ManagerController extends Controller
     public function exportEdit(ExpertEditRequest $request)
     {
         $info = $request->all();
-        try{
+        try {
             $expert = ExpertModel::find($info['id']);
-            if (!$expert){
-                return Common::jsonFormat('500','该专家不存在哟');
+            if (!$expert) {
+                return Common::jsonFormat('500', '该专家不存在哟');
             }
 
-            $result = ExpertModel::query()->where('phone_number',$info['phone_number'])->first();
-            if ($result){
-                return Common::jsonFormat('500','该手机号已注册');
+            $result = ExpertModel::query()->where('phone_number', $info['phone_number'])->where('id', '!=', $info['id'])->first();
+            if ($result) {
+                return Common::jsonFormat('500', '该手机号已注册');
             }
 
-            if (isset($info['phone_number']) && !is_null($info['phone_number'])){
+            if (isset($info['phone_number']) && !is_null($info['phone_number'])) {
                 $expert->phone_number = $info['phone_number'];
             }
-            if (isset($info['name']) && !is_null($info['name'])){
+            if (isset($info['name']) && !is_null($info['name'])) {
                 $expert->name = $info['name'];
             }
             $expert->save();
-            return Common::jsonFormat('200','修改成功');
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '修改成功');
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','修改失败');
+            return Common::jsonFormat('500', '修改失败');
         }
     }
 
@@ -415,18 +415,18 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
+        try {
             $expert = ExpertModel::find($info['id']);
-            if (!$expert){
-                return Common::jsonFormat('500','此专家不存在哟');
+            if (!$expert) {
+                return Common::jsonFormat('500', '此专家不存在哟');
             }
             $expert->status = 0; // 此处为软删除，0即为删除
             $expert->save();
 
-            return Common::jsonFormat('200','删除成功');
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '删除成功');
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','删除失败');
+            return Common::jsonFormat('500', '删除失败');
         }
     }
 
@@ -440,11 +440,11 @@ class ManagerController extends Controller
         $info = $request->all();
 
         $expert = ExpertModel::find($info['id']);
-        if (!$expert){
-            return Common::jsonFormat('500','此专家不存在哟');
+        if (!$expert) {
+            return Common::jsonFormat('500', '此专家不存在哟');
         }
 
-        return Common::jsonFormat('200','获取成功',$expert);
+        return Common::jsonFormat('200', '获取成功', $expert);
     }
 
     /**
@@ -456,12 +456,12 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        $review = SignUpInfoReview::where('info_id',$info['info_id'])->orderBy('created_at','desc')->get();
-        foreach ($review as &$v){
+        $review = SignUpInfoReview::where('info_id', $info['info_id'])->orderBy('created_at', 'desc')->get();
+        foreach ($review as &$v) {
             $v['operate_person'] = $v->manager['nickname'];
         }
 
-        return Common::jsonFormat('200','获取成功',$review);
+        return Common::jsonFormat('200', '获取成功', $review);
     }
 
     /**
@@ -473,16 +473,16 @@ class ManagerController extends Controller
     {
         $info = $request->all();
 
-        try{
+        try {
 
             $cookie_manager_token = $request->cookie('manager_token');
             $session_manager_id = $request->session()->get($cookie_manager_token);
-            DB::transaction(function () use ($info,$session_manager_id) {
+            DB::transaction(function () use ($info, $session_manager_id) {
 
-                foreach ($info['info_id'] as $v){
+                foreach ($info['info_id'] as $v) {
                     //在报名信息审核表 中新增数据
                     $review = new SignUpInfoReview();
-                    $review->user_id = substr($session_manager_id,13);
+                    $review->user_id = substr($session_manager_id, 13);
                     $review->info_id = $v;
                     $review->status = $info['status'];
                     $review->content = isset($info['content']) ? $info['content'] : '';
@@ -495,20 +495,20 @@ class ManagerController extends Controller
                     $res2 = $doctor->save();
 
                     //两张表都写入成功，发送短信
-                    if ($info['status'] == 2 && $res1 & $res2){
+                    if ($info['status'] == 2 && $res1 & $res2) {
                         $doctor_class = new DoctorController();
                         $content = $doctor_class->configAward($doctor['wanted_award']);
-                        $sms_res = SmsController::sendNotice($doctor['phone_number'],$content);
-                        Log::info('审核短信发送状态是：'.$sms_res);
+                        $sms_res = SmsController::sendNotice($doctor['phone_number'], $content);
+                        Log::info('审核短信发送状态是：' . $sms_res);
                     }
                 }
 
             });
 
-            return Common::jsonFormat('200','审核成功');
-        } catch (\Exception $e){
+            return Common::jsonFormat('200', '审核成功');
+        } catch (\Exception $e) {
             Log::error($e);
-            return Common::jsonFormat('500','审核失败');
+            return Common::jsonFormat('500', '审核失败');
         }
     }
 
@@ -518,16 +518,16 @@ class ManagerController extends Controller
      */
     public function statisticalGraph()
     {
-        $today_date_time = date('Y-m-d H:i:s',strtotime('today'));
-        $tomorrow_date_time = date('Y-m-d H:i:s',strtotime('tomorrow'));
+        $today_date_time = date('Y-m-d H:i:s', strtotime('today'));
+        $tomorrow_date_time = date('Y-m-d H:i:s', strtotime('tomorrow'));
         $cur_timestamp = time();
 
         $doctor = new DoctorModel();
         $doctor_count = $doctor->count(); //报名总数
-        $doctor_check_pending_count = $doctor->where('status',1)->count(); //待审核总数
-        $doctor_check_pass_count = $doctor->where('status',2)->count(); //已通过总数
-        $doctor_check_reject_count = $doctor->where('status',3)->count(); //未通过总数
-        $doctor_today_avg_count = $doctor->whereBetween('created_at',[$today_date_time,$tomorrow_date_time])->count(); //日平均报名数
+        $doctor_check_pending_count = $doctor->where('status', 1)->count(); //待审核总数
+        $doctor_check_pass_count = $doctor->where('status', 2)->count(); //已通过总数
+        $doctor_check_reject_count = $doctor->where('status', 3)->count(); //未通过总数
+        $doctor_today_avg_count = $doctor->whereBetween('created_at', [$today_date_time, $tomorrow_date_time])->count(); //日平均报名数
 
         $data = [
             'doctor_count' => $doctor_count,
@@ -540,9 +540,9 @@ class ManagerController extends Controller
 //        $doctor_day_avg_count = function ($date_range) use ($doctor) {
 //            $doctor->whereBetween('created_at',[$date_range['start'],$date_range['end']])->get(); //日平均报名数
 //        };
-        
 
-        return Common::jsonFormat('200','获取成功',$data);
+
+        return Common::jsonFormat('200', '获取成功', $data);
     }
 
     /**
@@ -553,6 +553,6 @@ class ManagerController extends Controller
      */
     public function testSetCookie(Request $request)
     {
-        return response('cookie设置成功')->cookie('manager_token',$request['manager_token']);
+        return response('cookie设置成功')->cookie('manager_token', $request['manager_token']);
     }
 }
