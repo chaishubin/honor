@@ -8,6 +8,7 @@ use App\Http\Requests\Vote\UserVoteRequest;
 use App\Models\DoctorSignUp\DoctorModel;
 use App\Models\DoctorSignUp\HospitalModel;
 use App\Models\DoctorSignUp\UserModel;
+use App\Models\DoctorSignUp\TdistrictModel;
 use App\Models\Vote\VoteModel;
 use App\Models\Vote\VoteRelationModel;
 use Illuminate\Http\Request;
@@ -166,9 +167,19 @@ class VoteController extends Controller
                 $result[$k]['expert_votes'] = $expert_votes;
                 $result[$k]['score'] = $score;
                 //根据遍历记录中的医院id，查出对应的地区名称
-                $hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
+                //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
                 //截取出地区名称中的省份
-                $result[$k]['province'] = mb_substr($hospital['district_address'],3,2);
+                //$result[$k]['province'] = mb_substr($hospital['district_address'],3,2);
+
+                $doctor_info = json_decode($v['doctor_other_info'],true);
+                $result[$k]['province'] = '';
+
+                if (array_key_exists('district_id',$doctor_info) && !empty($doctor_info['district_id'])){
+                    $dis_arr = explode(',',$doctor_info['district_id']);
+                    $district_shortname = TdistrictModel::query()->where('district_id',$dis_arr[0])->first(['district_shortname']);
+                    $result[$k]['province'] = $district_shortname['district_shortname'];
+                }
+
             }
         });
 
