@@ -131,9 +131,11 @@ class VoteController extends Controller
         //如果是pc端，搜索条件传入了省份，则要筛选
         if (isset($info['province']) && !is_null($info['province'])){
             //根据省份id的前三位匹配出医院表中，地区id前三位相匹配的医院id
-            $hospital = HospitalModel::where('district_id', 'like', substr($info['province'], 0, 3) . '%')->get(['id']);
+            //$hospital = HospitalModel::where('district_id', 'like', substr($info['province'], 0, 3) . '%')->get(['id']);
+            //$doctor->whereIn('hospital_id', $hospital)->first();
+            
+            $doctor->whereRaw("JSON_EXTRACT(doctor_other_info," . "'" . "$." . "\"" . "district_id" . "\"" . "')" . " LIKE " . "'%" . $info['province'] . "%'");
 
-            $doctor->whereIn('hospital_id', $hospital)->first();
         }
 
         $result = [];
