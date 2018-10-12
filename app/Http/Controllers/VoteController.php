@@ -164,8 +164,8 @@ class VoteController extends Controller
                 }
 
                 $result[$k]['job_title'] = $first.$second;
-                $result[$k]['public_votes'] = empty($public_votes) ? '0' : $public_votes;
-                $result[$k]['expert_votes'] = empty($expert_votes) ? '0' : $expert_votes;
+                $result[$k]['public_votes'] = $public_votes;
+                $result[$k]['expert_votes'] = $expert_votes;
                 $result[$k]['score'] = $score;
                 //根据遍历记录中的医院id，查出对应的地区名称
                 //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
