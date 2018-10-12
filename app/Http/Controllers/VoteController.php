@@ -188,6 +188,10 @@ class VoteController extends Controller
         $sort_field = array_column($result,$sort);
         array_multisort($sort_field,SORT_DESC,$result);
 
+        foreach ($result as $key => &$value){
+            $value['number'] = $key + 1;
+        }
+
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
 
