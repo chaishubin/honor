@@ -145,7 +145,7 @@ class VoteController extends Controller
                 $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
                 $expert_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'expert_votes');
                 $score = $public_votes + ($expert_votes * 4);
-                \Log::INFO($score);
+
 
                 $result[$k]['id'] = $v['id'];
                 $result[$k]['full_face_photo'] = $v['full_face_photo'];
@@ -165,8 +165,8 @@ class VoteController extends Controller
                 }
 
                 $result[$k]['job_title'] = $first.$second;
-                $result[$k]['public_votes'] = $public_votes;
-                $result[$k]['expert_votes'] = $expert_votes;
+                $result[$k]['public_votes'] = empty($public_votes) || is_null($public_votes) ? 0 : $public_votes;
+                $result[$k]['expert_votes'] = empty($expert_votes) || is_null($expert_votes) ? 0 : $expert_votes;
                 $result[$k]['score'] = $score ?? '0';
                 //根据遍历记录中的医院id，查出对应的地区名称
                 //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
@@ -185,10 +185,8 @@ class VoteController extends Controller
             }
         });
 
-        \Log::INFO($sort);
         //对数据按照public_votes或score
         $sort_field = array_column($result,$sort);
-        \Log::INFO($sort_field);
         array_multisort($sort_field,SORT_DESC,$result);
 
         foreach ($result as $key => &$value){
