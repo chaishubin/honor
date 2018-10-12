@@ -173,6 +173,8 @@ class VoteController extends Controller
                 $result[$k]['job_title'] = $first.$second;
                 $result[$k]['public_votes'] = empty($public_votes) || is_null($public_votes) ? 0 : $public_votes;
                 $result[$k]['expert_votes'] = empty($expert_votes) || is_null($expert_votes) ? 0 : $expert_votes;
+
+                $result[$k]['count_votes'] = $result[$k]['public_votes'] + $result[$k]['expert_votes'];
                 $result[$k]['score'] = $score ?? '0';
                 //根据遍历记录中的医院id，查出对应的地区名称
                 //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
@@ -214,12 +216,12 @@ class VoteController extends Controller
     public function loginedCandidateVoteList(CandidateVoteListRequest $request)
     {
         $info = $request->all();
-        \Log::INFO('哈哈哈');
         $cookie_user_token = $request->cookie('user_token');
         $voters = UserModel::where('access_token',$cookie_user_token)->first();
         if (!$voters){
             return Common::jsonFormat('500','用户信息不正确');
         }
+
 
         //闭包函数，用来检测当前登录用户是否已经对医生投过票
         $check_is_voted = function($candidate_id) use ($voters)
@@ -244,9 +246,10 @@ class VoteController extends Controller
             $doctor_class = new DoctorController();
             //遍历把redis中的票数信息插入每条记录中
             foreach ($res as $k => $v){
+
                 $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
-                $a = $v['id'] . ':' . $v['wanted_award'] . $public_votes;
-                \Log::INFO($a);
+                $expert_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'expert_votes');
+
 
                 $result[$k]['id'] = $v['id'];
                 $result[$k]['full_face_photo'] = $v['full_face_photo'];
@@ -263,7 +266,10 @@ class VoteController extends Controller
                 }
 
                 $result[$k]['job_title'] = $first.$second;
-                $result[$k]['public_votes'] = $public_votes;
+                //$result[$k]['public_votes'] = $public_votes;
+                $result[$k]['public_votes'] = empty($public_votes) || is_null($public_votes) ? 0 : $public_votes;
+                $result[$k]['expert_votes'] = empty($expert_votes) || is_null($expert_votes) ? 0 : $expert_votes;
+                $result[$k]['count_votes'] = $result[$k]['public_votes'] + $result[$k]['expert_votes'];
                 $result[$k]['is_voted'] = $check_is_voted($v['id']);
             }
         });
