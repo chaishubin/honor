@@ -245,6 +245,8 @@ class VoteController extends Controller
             //遍历把redis中的票数信息插入每条记录中
             foreach ($res as $k => $v){
                 $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
+                $a = $v['id'] . ':' . $v['wanted_award'] . $public_votes;
+                \Log::INFO($a);
 
                 $result[$k]['id'] = $v['id'];
                 $result[$k]['full_face_photo'] = $v['full_face_photo'];
