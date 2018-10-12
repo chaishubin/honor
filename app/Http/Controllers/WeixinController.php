@@ -23,6 +23,7 @@ class WeixinController extends Controller
 
             $client = new Client();
             $res = $client->request('GET',$url)->getBody()->getContents();
+            \Log::info($res);
             $access_token = json_decode($res,true)['access_token'];
             if(isset($access_token)){
                 $data['access_token']  = $access_token;
