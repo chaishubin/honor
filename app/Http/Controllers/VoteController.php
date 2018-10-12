@@ -145,6 +145,7 @@ class VoteController extends Controller
                 $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
                 $expert_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'expert_votes');
                 $score = $public_votes + ($expert_votes * 4);
+                \Log::INFO($score);
 
                 $result[$k]['id'] = $v['id'];
                 $result[$k]['full_face_photo'] = $v['full_face_photo'];
@@ -183,7 +184,7 @@ class VoteController extends Controller
 
             }
         });
-        
+
         //对数据按照public_votes或score
         $sort_field = array_column($result,$sort);
         \Log::INFO($sort_field);
