@@ -72,24 +72,32 @@ class VoteController extends Controller
             if ($res){
                 //判断redis中是否存在此key 存在返回1，不存在返回0
                 if (Redis::exists('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'])){ //存在,进行 更新操作
+                    \Log::INFO('1');
                     if ($voters_type == 2){ //专家
+                        \Log::INFO('1-1');
                         //专家票数加一
                         Redis::hincrby('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],'expert_votes',1);
                     }else{ // 大众
                         //大众票数加一
+                        \Log::INFO('1-2');
                         Redis::hincrby('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],'public_votes',1);
                     }
                 }else{ //不存在，进行新增操作
+                    \Log::INFO('2');
                     $vote = VoteModel::where(['candidate_id' => $info['candidate_id'], 'award_id' => $info['award_id']])->first();
                     //此处是为了应对，redis中的数据丢失，但仍在表中备份的情况，此时把数据库中的数据再写入redis中
                     if ($vote){
+                        \Log::INFO('2-1');
                         //存入hash类型的redis
                         Redis::hmset('rongyao2018:vote:'.$info['candidate_id'].':'.$info['award_id'],['public_votes' => $vote['public_votes'], 'expert_votes' => $vote['expert_votes']]);
                     }else{
+                        \Log::INFO('2-2');
                         if ($voters_type == 2){ //专家
+                            \Log::INFO('2-2-1');
                             $public_votes = 0;
                             $expert_votes = 1;
                         }else{ // 大众
+                            \Log::INFO('2-2-2');
                             $public_votes = 1;
                             $expert_votes = 0;
                         }
@@ -103,11 +111,9 @@ class VoteController extends Controller
 //                dd($res);die;
                 return Common::jsonFormat('200','投票成功');
             }
-            \Log::info('one');
             return Common::jsonFormat('500','投票失败');
         } catch (\Exception $e){
             Log::error($e);
-            \Log::info('two');
             return Common::jsonFormat('500','投票失败');
         }
     }
