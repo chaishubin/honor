@@ -183,6 +183,7 @@ class VoteController extends Controller
 
             }
         });
+        \Log::INFO($result);
 
         //对数据按照public_votes或score
         $sort_field = array_column($result,$sort);
