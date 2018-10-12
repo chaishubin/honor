@@ -186,11 +186,12 @@ class VoteController extends Controller
 
         //对数据按照public_votes或score
         $sort_field = array_column($result,$sort);
+        \Log::INFO($sort_field);
         array_multisort($sort_field,SORT_DESC,$result);
 
-//        foreach ($result as $key => &$value){
-//            $value['working_year'] = $key + 1;
-//        }
+        foreach ($result as $key => &$value){
+            $value['working_year'] = $key + 1;
+        }
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
         $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
