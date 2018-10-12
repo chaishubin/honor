@@ -120,7 +120,7 @@ class VoteController extends Controller
     public function candidateVoteList(CandidateVoteListRequest $request)
     {
         $info = $request->all();
-        $sort = (isset($info['is_pc']) && $info['is_pc'] == 'true') ? 'score' : 'public_votes';
+        $sort = (isset($info['is_pc']) && $info['is_pc'] == true) ? 'score' : 'public_votes';
 
         $doctor = DoctorModel::query();
         $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
