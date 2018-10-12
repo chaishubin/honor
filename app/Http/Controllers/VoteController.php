@@ -214,7 +214,7 @@ class VoteController extends Controller
     public function loginedCandidateVoteList(CandidateVoteListRequest $request)
     {
         $info = $request->all();
-
+        \Log::INFO('哈哈哈');
         $cookie_user_token = $request->cookie('user_token');
         $voters = UserModel::where('access_token',$cookie_user_token)->first();
         if (!$voters){
