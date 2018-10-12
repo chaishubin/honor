@@ -189,7 +189,7 @@ class VoteController extends Controller
         array_multisort($sort_field,SORT_DESC,$result);
 
         foreach ($result as $key => &$value){
-            $value['number'] = $key + 1;
+            $value['working_year'] = $key + 1;
         }
 
         $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
