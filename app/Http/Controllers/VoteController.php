@@ -40,19 +40,19 @@ class VoteController extends Controller
             $voters_type = $check_expert === 'pass' ? 2 : 1; //pass是专家2，否则就是大众1
 
             if ($voters_type == 1){ // 大众
-                $vote_user_relation = VoteRelationModel::where('voters_id',$voters['id'])->first();
+                $vote_user_relation = VoteRelationModel::query()->where([['voters_id',$voters['id']],['award_id',$info['award_id']]])->first();
                 if ($vote_user_relation){ // 若查询到记录，说明该用户已经至少投过一次票了，普通用户只能参与投票一次
                     return Common::jsonFormat('500','您只能投一票，您已经参与过投票了');
                 }
             }else{ // 专家
-                $count_vote = VoteRelationModel::where('voters_id',$voters['id'])->count();
+                $count_vote = VoteRelationModel::query()->where([['voters_id',$voters['id']],['award_id',$info['award_id']]])->count();
 
                 if ($count_vote >= 10){ // 专家在每个奖项有10次投票机会
                     return Common::jsonFormat('500','您在该奖项的投票次数已用完');
                 }
 
                 //专家对一个用户也只能投一票
-                $expert_vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $info['candidate_id']])->first();
+                $expert_vote_relation = VoteRelationModel::where(['voters_id' => $voters['id'], 'candidate_id' => $info['candidate_id'],'award_id' => $info['award_id']])->first();
 
                 if ($expert_vote_relation){
                     return Common::jsonFormat('500','您已经对此用户投过票了，不要重复投票');
