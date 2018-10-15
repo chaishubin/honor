@@ -631,7 +631,7 @@ class ManagerController extends Controller
                 $data[$k] = array($v['name'],$v['hospital_name'],$v['department'],$v['public_votes'],$v['expert_votes'],$v['score'],$k + 1);
             }
 
-        }else if($info['award_id'] == 108) { // 判断是不是基础好医生奖
+        }else if($info['award_id'] == 108) { // 判断是不是基层好医生奖
             $table_title = ['姓名','专业职称','所属医院','所属科室','大众投票','所属省份','专家投票','最终分数','排名'];
 
             foreach ($result as $k => $v){
