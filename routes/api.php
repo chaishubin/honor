@@ -88,6 +88,7 @@ Route::group(['prefix' => '/vote'], function () {
     Route::post('userVote', 'VoteController@userVote')->middleware('checkUserLogin');
     Route::post('candidateVoteList', 'VoteController@candidateVoteList');
     Route::post('loginedCandidateVoteList', 'VoteController@loginedCandidateVoteList')->middleware('checkUserLogin');
+    Route::post('votesListExport', 'ManagerController@votesListExport')->middleware('checkManagerLogin');
     Route::any('expertAwardListWithVotes', 'VoteController@expertAwardListWithVotes')->middleware('checkUserLogin');
 });
 
@@ -100,7 +101,7 @@ Route::group(['prefix' => '/vote'], function () {
 //Route::post('/manager/candidateVoteList', 'VoteController@candidateVoteList');
 
 
-Route::get('votesListExport', 'ManagerController@votesListExport');
+
 
 
 

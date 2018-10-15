@@ -388,6 +388,19 @@
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
+                    <div class="item-doc">
+                        <h5>投票列表记录导出: <small class="link">/api/vote/votesListExport</small></h5>
+                        <form role="form" action="/api/vote/votesListExport">
+                            <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon"><em>*</em>award_id</span><input name="award_id" placeholder="奖项id，可参考 ·奖项配置· 接口" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">province</span><input name="province" placeholder="省份id" value="" type="text" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
                 </li>
                 <li>
                     <h3>数据统计</h3>
