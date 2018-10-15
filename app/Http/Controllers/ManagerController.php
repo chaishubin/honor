@@ -624,10 +624,28 @@ class ManagerController extends Controller
         array_multisort($sort_field,SORT_DESC,$result);
 
         $data = [];
-        foreach ($result as $k => $v){
-            $data[$k] = array($v['name'],$v['job_title'],$v['hospital_name'],$v['department'],$v['public_votes'],$v['province'],$v['expert_votes'],$v['score'],$k + 1);
+        if($info['award_id'] == 104){ // 判断是不是团队
+            $table_title = ['团队名字','所属医院','所属科室','大众投票','专家投票','最终分数','排名'];
+
+            foreach ($result as $k => $v){
+                $data[$k] = array($v['name'],$v['hospital_name'],$v['department'],$v['public_votes'],$v['expert_votes'],$v['score'],$k + 1);
+            }
+
+        }else if($info['award_id'] == 108) { // 判断是不是基础好医生奖
+            $table_title = ['姓名','专业职称','所属医院','所属科室','大众投票','所属省份','专家投票','最终分数','排名'];
+
+            foreach ($result as $k => $v){
+                $data[$k] = array($v['name'],$v['job_title'],$v['hospital_name'],$v['department'],$v['public_votes'],$v['province'],$v['expert_votes'],$v['score'],$k + 1);
+            }
+        }else {// 个人
+            $table_title = ['姓名','专业职称','所属医院','所属科室','大众投票','专家投票','最终分数','排名'];
+
+            foreach ($result as $k => $v){
+                $data[$k] = array($v['name'],$v['job_title'],$v['hospital_name'],$v['department'],$v['public_votes'],$v['expert_votes'],$v['score'],$k + 1);
+            }
         }
-        array_unshift($data,['姓名','专业职称','所属医院','所属科室','大众投票','所属省份','专家投票','最终分数','排名']);
+
+        array_unshift($data,$table_title);
 
         $excel = new ExcelController();
         $cur_time = time();
