@@ -100,7 +100,7 @@ Route::group(['prefix' => '/vote'], function () {
 //Route::post('/manager/candidateVoteList', 'VoteController@candidateVoteList');
 
 
-Route::any('export', 'ExcelController@export');
+Route::get('votesListExport', 'ManagerController@votesListExport');
 
 
 

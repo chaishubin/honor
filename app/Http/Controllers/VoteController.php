@@ -176,7 +176,7 @@ class VoteController extends Controller
                 $doctor_info = json_decode($v['doctor_other_info'],true);
                 $result[$k]['province'] = '';
 
-                if (array_key_exists('district_id',$doctor_info) && !empty($doctor_info['district_id'])){
+                if ($doctor_info && array_key_exists('district_id',$doctor_info) && !empty($doctor_info['district_id'])){
                     $dis_arr = explode(',',$doctor_info['district_id']);
                     $district_shortname = TdistrictModel::query()->where('district_id',$dis_arr[0])->first(['district_shortname']);
                     $result[$k]['province'] = $district_shortname['district_shortname'];

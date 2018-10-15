@@ -2,26 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vote\VoteModel;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
-use Maatwebsite\Excel\Excel;
+use XLSXWriter;
 
 class ExcelController extends Controller
 {
     private $excel;
 
-    public function __construct(Excel $excel)
+
+    /**
+     * @param $data
+     * $data = array(
+            array('year','month','amount'),
+            array('2003','1','220'),
+            array('2003','2','153.5'),
+        );
+     * @param $name
+     */
+    public function export($data,$name)
     {
-        $this->excel = $excel;
-    }
+        $filename = $name ?? 'hornor.xlsx';
 
-    public function export()
-    {
-
-
-
-//        return $this->excel->download($title,$filename);
+        $writer = new XLSXWriter();
+        $writer->writeSheet($data);
+        $writer->writeToFile($filename);
     }
 }
