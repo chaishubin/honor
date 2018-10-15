@@ -634,7 +634,7 @@ class ManagerController extends Controller
         $excel->export($data,'rongyao2018votes'.$cur_time.'.xlsx');
 
         $res = ['url' => 'rongyao2018votes'.$cur_time.'.xlsx'];
-        return Common::jsonFormat('200', '获取成功',$res);
+        return Common::jsonFormat('200', '导出成功',$res);
     }
 
     /**
