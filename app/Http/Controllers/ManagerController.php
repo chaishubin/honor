@@ -549,6 +549,10 @@ class ManagerController extends Controller
         $sign_up_avg = $doctor_count / ($sign_up_avg_count_end - $sign_up_time_start); // 日平均报名数
         $vote_avg = $public_votes / ($vote_avg_count_end - $vote_time_start); // 日平均投票数
         $hospital_sign_up_count_total = $doctor->select(DB::raw("hospital_name, count('id') as num"))->groupBy('hospital_name')->count(); // 医院报名人数总数
+        $log_sql = $doctor->select(DB::raw("hospital_name, count('id') as num"))->groupBy('hospital_name')->toSql();
+        Log::info('count'.$hospital_sign_up_count_total.'>>>');
+        Log::info('sql=>'.$log_sql);
+
         $hospital_sign_up_count = $doctor->select(DB::raw("hospital_name, count('id') as num"))->offset($offset)->limit($limit)->orderBy('num','desc')->groupBy('hospital_name')->get(); // 医院报名人数
 
 
