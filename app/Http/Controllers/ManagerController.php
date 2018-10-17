@@ -15,6 +15,7 @@ use App\Http\Requests\Manager\ManagerLoginRequest;
 use App\Http\Requests\Manager\ManagerLogoutRequest;
 use App\Http\Requests\Manager\SignUpInfoReviewListRequest;
 use App\Http\Requests\Manager\SignUpInfoReviewRequest;
+use App\Http\Requests\Manager\StatisticalGraphRequest;
 use App\Http\Requests\Manager\TimeSettingRequest;
 use App\Http\Requests\Manager\VotesListExportRequest;
 use App\Http\Requests\Vote\CandidateVoteListRequest;
@@ -520,8 +521,13 @@ class ManagerController extends Controller
      * @return \Illuminate\Http\JsonResponse
      * 数据统计
      */
-    public function statisticalGraph()
+    public function statisticalGraph(StatisticalGraphRequest $request)
     {
+        $info = $request->all();
+
+        $limit = isset($info['hospital_sign_up_length']) && !is_null($info['hospital_sign_up_length']) ? $info['hospital_sign_up_length'] : 10;
+        $offset = isset($info['hospital_sign_up_cur_page']) && !is_null($info['hospital_sign_up_cur_page']) ?($info['hospital_sign_up_cur_page'] - 1) * $limit : 0;
+
         $time_limit = SettingModel::getTimeLimit();
         $sign_up_time_start = date_format(date_create(json_decode($time_limit['value'],true)['sign_up_time']['start']),'Ymd');
         $sign_up_time_end = date_format(date_create(json_decode($time_limit['value'],true)['sign_up_time']['end']),'Ymd');
@@ -542,7 +548,7 @@ class ManagerController extends Controller
         $public_votes = Redis::get('rongyao2018:public_votes_sum') ?? 0; // 投票总数
         $sign_up_avg = $doctor_count / ($sign_up_avg_count_end - $sign_up_time_start); // 日平均报名数
         $vote_avg = $public_votes / ($vote_avg_count_end - $vote_time_start); // 日平均投票数
-        $hospital_sign_up_count = $doctor->select(DB::raw("hospital_name, count('id') as num"))->orderBy('num','desc')->groupBy('hospital_name')->get(); // 医院报名人数
+        $hospital_sign_up_count = $doctor->select(DB::raw("hospital_name, count('id') as num"))->offset($offset)->limit($limit)->orderBy('num','desc')->groupBy('hospital_name')->get(); // 医院报名人数
 
 
         //查询一天内的报名人数的闭包函数

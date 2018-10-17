@@ -408,6 +408,12 @@
                         <h5>统计数据列表: <small class="link">/api/manager/statisticalGraph</small></h5>
                         <form role="form" action="/api/manager/statisticalGraph">
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
+                            <div class="input-group">
+                                <span class="input-group-addon">hospital_sign_up_cur_page</span><input name="hospital_sign_up_cur_page" placeholder="医院报名人数统计 当前页数" value="" type="text" class="form-control">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">hospital_sign_up_length</span><input name="hospital_sign_up_length" placeholder="医院报名人数统计 每页显示条数" value="" type="text" class="form-control">
+                            </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
