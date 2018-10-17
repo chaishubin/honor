@@ -548,11 +548,7 @@ class ManagerController extends Controller
         $public_votes = Redis::get('rongyao2018:public_votes_sum') ?? 0; // 投票总数
         $sign_up_avg = $doctor_count / ($sign_up_avg_count_end - $sign_up_time_start); // 日平均报名数
         $vote_avg = $public_votes / ($vote_avg_count_end - $vote_time_start); // 日平均投票数
-        $hospital_sign_up_count_total = $doctor->select(DB::raw("hospital_name, count('id') as num"))->groupBy('hospital_name')->count(); // 医院报名人数总数
-        $log_sql = $doctor->select(DB::raw("hospital_name, count('id') as num"))->groupBy('hospital_name')->toSql();
-        Log::info('count'.$hospital_sign_up_count_total.'>>>');
-        Log::info('sql=>'.$log_sql);
-
+        $hospital_sign_up_count_total = $doctor->select(DB::raw("hospital_name"))->groupBy('hospital_name')->get(); // 医院报名人数总数
         $hospital_sign_up_count = $doctor->select(DB::raw("hospital_name, count('id') as num"))->offset($offset)->limit($limit)->orderBy('num','desc')->groupBy('hospital_name')->get(); // 医院报名人数
 
 
@@ -611,7 +607,7 @@ class ManagerController extends Controller
             'range_sign_up_count' => $range_sign_up_count, //区间内每天报名人数
             'range_vote_count' => $range_vote_count, //区间内每天投票人数
             'range_agreement_count' => $range_agreement_count, // 区间内每天同意协议的人数
-            'hospital_sign_up_count' => ['total' => $hospital_sign_up_count_total, 'data' => $hospital_sign_up_count], // 医院报名人数
+            'hospital_sign_up_count' => ['total' => count($hospital_sign_up_count_total), 'data' => $hospital_sign_up_count], // 医院报名人数
         ];
 
         return Common::jsonFormat('200', '获取成功', $data);
