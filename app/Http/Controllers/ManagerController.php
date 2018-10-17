@@ -24,6 +24,7 @@ use App\Models\Manager\ExpertModel;
 use App\Models\Manager\ManagerModel;
 use App\Models\Manager\SettingModel;
 use App\Models\Manager\SignUpInfoReview;
+use App\Models\Vote\VoteRelationModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -521,29 +522,86 @@ class ManagerController extends Controller
      */
     public function statisticalGraph()
     {
-        $today_date_time = date('Y-m-d H:i:s', strtotime('today'));
-        $tomorrow_date_time = date('Y-m-d H:i:s', strtotime('tomorrow'));
-        $cur_timestamp = time();
+        $time_limit = SettingModel::getTimeLimit();
+        $sign_up_time_start = date_format(date_create(json_decode($time_limit['value'],true)['sign_up_time']['start']),'Ymd');
+        $sign_up_time_end = date_format(date_create(json_decode($time_limit['value'],true)['sign_up_time']['end']),'Ymd');
+
+        $vote_time_start = date_format(date_create(json_decode($time_limit['value'],true)['vote_time']['start']),'Ymd');
+        $vote_time_end = date_format(date_create(json_decode($time_limit['value'],true)['vote_time']['end']),'Ymd');
+
+        //用来统计日均投票、日均报名数用的截止时间
+        $sign_up_avg_count_end = date('Ymd',time()) >= $sign_up_time_end ? $sign_up_time_end : date('Ymd',time());
+        $vote_avg_count_end = date('Ymd',time()) >= $vote_time_end ? $vote_time_end : date('Ymd',time());
+
 
         $doctor = new DoctorModel();
         $doctor_count = $doctor->count(); //报名总数
         $doctor_check_pending_count = $doctor->where('status', 1)->count(); //待审核总数
         $doctor_check_pass_count = $doctor->where('status', 2)->count(); //已通过总数
         $doctor_check_reject_count = $doctor->where('status', 3)->count(); //未通过总数
-        $doctor_today_avg_count = $doctor->whereBetween('created_at', [$today_date_time, $tomorrow_date_time])->count(); //日平均报名数
+        $public_votes = Redis::get('rongyao2018:public_votes_sum') ?? 0; // 投票总数
+        $sign_up_avg = $doctor_count / ($sign_up_avg_count_end - $sign_up_time_start); // 日平均报名数
+        $vote_avg = $public_votes / ($vote_avg_count_end - $vote_time_start); // 日平均投票数
+        $hospital_sign_up_count = $doctor->select(DB::raw("hospital_name, count('id') as num"))->orderBy('num','desc')->groupBy('hospital_name')->get(); // 医院报名人数
+
+
+        //查询一天内的报名人数的闭包函数
+        $doctor_day_count_fun = function ($date_range) use ($doctor) {
+            return $doctor->whereBetween('created_at',[$date_range['start'],$date_range['end']])->count(); //一天的报名数
+        };
+
+        //查询一天内投票人数的闭包函数
+        $vote_relation = new VoteRelationModel();
+        $vote_day_count_fun = function ($date_range) use ($vote_relation) {
+            return $vote_relation->whereBetween('created_at',[$date_range['start'],$date_range['end']])->count(); // 一天内的投票数
+        };
+
+        //查询一天内的报名时同意协议人数的闭包函数
+        $doctor_day_agreement_count_fun = function ($date_range) use ($doctor) {
+            return $doctor->where('doctor_other_info->agreement',1)->whereBetween('created_at',[$date_range['start'],$date_range['end']])->count(); //一天的报名数
+        };
+
+
+        $sign_up_day_count = $sign_up_time_end - $sign_up_time_start;
+        $vote_day_count = $vote_time_end - $vote_time_start;
+
+        $range_sign_up_count = [];
+        $range_vote_count = [];
+        $range_agreement_count = [];
+        //统计区间内每天报名人数
+        if ($sign_up_day_count > 0){
+            for ($i = 0; $i <= $sign_up_day_count; $i++ ){
+                // 86400  => 60 * 60 * 24 ,一天的秒数
+                $date_range = ['start' => date('Y-m-d H:i:s',strtotime($sign_up_time_start) + $i * 86400), 'end' => date('Y-m-d H:i:s',strtotime($sign_up_time_start) + $i * 86400 + 86400)];
+
+                $range_sign_up_count[date('Y-m-d',strtotime($sign_up_time_start) + $i * 86400)] = $doctor_day_count_fun($date_range);
+                $range_agreement_count[date('Y-m-d',strtotime($sign_up_time_start) + $i * 86400)] = $doctor_day_agreement_count_fun($date_range);
+            }
+        }
+
+        //统计区间内每天投票人数
+        if ($vote_day_count > 0){
+            for ($i = 0; $i <= $vote_day_count; $i++ ){
+                // 86400  => 60 * 60 * 24 ,一天的秒数
+                $date_range = ['start' => date('Y-m-d H:i:s',strtotime($vote_time_start) + $i * 86400), 'end' => date('Y-m-d H:i:s',strtotime($vote_time_start) + $i * 86400 + 86400)];
+                $range_vote_count[date('Y-m-d',strtotime($vote_time_start) + $i * 86400)] = $vote_day_count_fun($date_range);
+            }
+        }
+
 
         $data = [
-            'doctor_count' => $doctor_count,
-            'doctor_check_pending_count' => $doctor_check_pending_count,
-            'doctor_check_pass_count' => $doctor_check_pass_count,
-            'doctor_check_reject_count' => $doctor_check_reject_count,
-            'doctor_today_avg_count' => $doctor_today_avg_count,
+            'doctor_count' => $doctor_count, //医生报名总数
+            'doctor_check_pending_count' => $doctor_check_pending_count, // 报名待审核总数
+            'doctor_check_pass_count' => $doctor_check_pass_count, // 报名审核已通过总数
+            'doctor_check_reject_count' => $doctor_check_reject_count, // 报名审核未通过总数
+            'votes_count' => $public_votes, // 投票总数
+            'sign_up_avg' => $sign_up_avg, // 日平均报名数
+            'vote_avg' => $vote_avg, // 日平均投票数
+            'range_sign_up_count' => $range_sign_up_count, //区间内每天报名人数
+            'range_vote_count' => $range_vote_count, //区间内每天投票人数
+            'range_agreement_count' => $range_agreement_count, // 区间内每天同意协议的人数
+            'hospital_sign_up_count' => $hospital_sign_up_count, // 医院报名人数
         ];
-
-//        $doctor_day_avg_count = function ($date_range) use ($doctor) {
-//            $doctor->whereBetween('created_at',[$date_range['start'],$date_range['end']])->get(); //日平均报名数
-//        };
-
 
         return Common::jsonFormat('200', '获取成功', $data);
     }

@@ -105,4 +105,3 @@ Route::group(['prefix' => '/vote'], function () {
 
 
 
-

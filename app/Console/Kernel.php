@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\VotesInRedisStoreToMysql::class,
+        \App\Console\Commands\StorePublicVotesToRedis::class,
     ];
 
     /**
@@ -26,7 +27,12 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        //将redis中的投票信息存入mysql
         $schedule->command('VotesInRedisStoreToMysql')->everyTenMinutes();
+
+        //把redis中所有候选人的大众票数遍历统计的总和存储再redis中
+        $schedule->command('StorePublicVotesToRedis')->everyTenMinutes();
+
     }
 
     /**
