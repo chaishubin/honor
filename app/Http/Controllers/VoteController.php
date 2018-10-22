@@ -117,6 +117,7 @@ class VoteController extends Controller
      */
     public function candidateVoteList(CandidateVoteListRequest $request)
     {
+        Log::info('9999');
         $info = $request->all();
         $sort = (isset($info['is_pc']) && $info['is_pc'] == 'is_pc') ? 'score' : 'public_votes';
 
