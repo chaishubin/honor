@@ -523,6 +523,7 @@ class ManagerController extends Controller
      */
     public function statisticalGraph(StatisticalGraphRequest $request)
     {
+        Log::info(Redis::keys('*'));
         $info = $request->all();
 
         $limit = isset($info['hospital_sign_up_length']) && !is_null($info['hospital_sign_up_length']) ? $info['hospital_sign_up_length'] : 10;
