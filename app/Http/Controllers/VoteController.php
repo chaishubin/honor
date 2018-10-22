@@ -120,83 +120,91 @@ class VoteController extends Controller
         $info = $request->all();
         $sort = (isset($info['is_pc']) && $info['is_pc'] == 'is_pc') ? 'score' : 'public_votes';
 
-        $doctor = DoctorModel::query();
-        $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
-        if (isset($info['doctor_name']) && !is_null($info['doctor_name'])){
-            $doctor->where('name','like', '%'.$info['doctor_name'].'%');
-        }
+        /**test*/
+        try {
 
-        //如果是pc端，搜索条件传入了省份，则要筛选
-        if (isset($info['province']) && !is_null($info['province'])){
-            //根据省份id的前三位匹配出医院表中，地区id前三位相匹配的医院id
-            //$hospital = HospitalModel::where('district_id', 'like', substr($info['province'], 0, 3) . '%')->get(['id']);
-            //$doctor->whereIn('hospital_id', $hospital)->first();
-
-            $doctor->whereRaw("JSON_EXTRACT(doctor_other_info," . "'" . "$." . "\"" . "district_id" . "\"" . "')" . " LIKE " . "'%" . $info['province'] . "%'");
-        }
-
-        $result = [];
-        $doctor->chunk(100, function($res) use (&$result) {
-            $doctor_class = new DoctorController();
-            //遍历把redis中的票数信息插入每条记录中
-            foreach ($res as $k => $v){
-                $public_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'public_votes');
-                $expert_votes = Redis::hget('rongyao2018:vote:'.$v['id'].':'.$v['wanted_award'],'expert_votes');
-                $score = $public_votes + ($expert_votes * 4);
-
-
-                $result[$k]['id'] = $v['id'];
-                $result[$k]['full_face_photo'] = $v['full_face_photo'];
-                $result[$k]['name'] = $v['name'];
-                $result[$k]['hospital_name'] = $v['hospital_name'];
-                $result[$k]['department'] = $v['department'];
-
-                //拼接号职称的 全称
-                $job_title = json_decode($v['job_title'], true);
-                $first = '';
-                if (isset($job_title['first'])){
-                    $first = $doctor_class->configJobTitle($job_title['first']);
-                }
-                $second = '';
-                if (isset($job_title['second'])){
-                    $second = ' · '.$doctor_class->configJobTitle($job_title['second']);
-                }
-
-                $result[$k]['job_title'] = $first.$second;
-                $result[$k]['public_votes'] = empty($public_votes) || is_null($public_votes) ? 0 : $public_votes;
-                $result[$k]['expert_votes'] = empty($expert_votes) || is_null($expert_votes) ? 0 : $expert_votes;
-
-                $result[$k]['count_votes'] = $result[$k]['public_votes'] + $result[$k]['expert_votes'];
-                $result[$k]['score'] = $score ?? '0';
-                //根据遍历记录中的医院id，查出对应的地区名称
-                //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
-                //截取出地区名称中的省份
-                //$result[$k]['province'] = mb_substr($hospital['district_address'],3,2);
-
-                $doctor_info = json_decode($v['doctor_other_info'],true);
-                $result[$k]['province'] = '';
-
-                if ($doctor_info && array_key_exists('district_id',$doctor_info) && !empty($doctor_info['district_id'])){
-                    $dis_arr = explode(',',$doctor_info['district_id']);
-                    $district_shortname = TdistrictModel::query()->where('district_id',$dis_arr[0])->first(['district_shortname']);
-                    $result[$k]['province'] = $district_shortname['district_shortname'];
-                }
-
+            $doctor = DoctorModel::query();
+            $doctor->where(['status' => 2, 'wanted_award' => $info['award_id']]); // 报名状态为2，只取审核已通过的
+            if (isset($info['doctor_name']) && !is_null($info['doctor_name'])) {
+                $doctor->where('name', 'like', '%' . $info['doctor_name'] . '%');
             }
-        });
 
-        //对数据按照public_votes或score
-        $sort_field = array_column($result,$sort);
-        array_multisort($sort_field,SORT_DESC,$result);
+            //如果是pc端，搜索条件传入了省份，则要筛选
+            if (isset($info['province']) && !is_null($info['province'])) {
+                //根据省份id的前三位匹配出医院表中，地区id前三位相匹配的医院id
+                //$hospital = HospitalModel::where('district_id', 'like', substr($info['province'], 0, 3) . '%')->get(['id']);
+                //$doctor->whereIn('hospital_id', $hospital)->first();
 
-        foreach ($result as $key => &$value){
-            $value['working_year'] = $key + 1;
+                $doctor->whereRaw("JSON_EXTRACT(doctor_other_info," . "'" . "$." . "\"" . "district_id" . "\"" . "')" . " LIKE " . "'%" . $info['province'] . "%'");
+            }
+
+            $result = [];
+            $doctor->chunk(100, function ($res) use (&$result) {
+                $doctor_class = new DoctorController();
+                //遍历把redis中的票数信息插入每条记录中
+                foreach ($res as $k => $v) {
+                    $public_votes = Redis::hget('rongyao2018:vote:' . $v['id'] . ':' . $v['wanted_award'], 'public_votes');
+                    $expert_votes = Redis::hget('rongyao2018:vote:' . $v['id'] . ':' . $v['wanted_award'], 'expert_votes');
+                    $score = $public_votes + ($expert_votes * 4);
+
+
+                    $result[$k]['id'] = $v['id'];
+                    $result[$k]['full_face_photo'] = $v['full_face_photo'];
+                    $result[$k]['name'] = $v['name'];
+                    $result[$k]['hospital_name'] = $v['hospital_name'];
+                    $result[$k]['department'] = $v['department'];
+
+                    //拼接号职称的 全称
+                    $job_title = json_decode($v['job_title'], true);
+                    $first = '';
+                    if (isset($job_title['first'])) {
+                        $first = $doctor_class->configJobTitle($job_title['first']);
+                    }
+                    $second = '';
+                    if (isset($job_title['second'])) {
+                        $second = ' · ' . $doctor_class->configJobTitle($job_title['second']);
+                    }
+
+                    $result[$k]['job_title'] = $first . $second;
+                    $result[$k]['public_votes'] = empty($public_votes) || is_null($public_votes) ? 0 : $public_votes;
+                    $result[$k]['expert_votes'] = empty($expert_votes) || is_null($expert_votes) ? 0 : $expert_votes;
+
+                    $result[$k]['count_votes'] = $result[$k]['public_votes'] + $result[$k]['expert_votes'];
+                    $result[$k]['score'] = $score ?? '0';
+                    //根据遍历记录中的医院id，查出对应的地区名称
+                    //$hospital = HospitalModel::where('id', $v['hospital_id'])->first(['district_address']);
+                    //截取出地区名称中的省份
+                    //$result[$k]['province'] = mb_substr($hospital['district_address'],3,2);
+
+                    $doctor_info = json_decode($v['doctor_other_info'], true);
+                    $result[$k]['province'] = '';
+
+                    if ($doctor_info && array_key_exists('district_id', $doctor_info) && !empty($doctor_info['district_id'])) {
+                        $dis_arr = explode(',', $doctor_info['district_id']);
+                        $district_shortname = TdistrictModel::query()->where('district_id', $dis_arr[0])->first(['district_shortname']);
+                        $result[$k]['province'] = $district_shortname['district_shortname'];
+                    }
+
+                }
+            });
+
+            //对数据按照public_votes或score
+            $sort_field = array_column($result, $sort);
+            array_multisort($sort_field, SORT_DESC, $result);
+
+            foreach ($result as $key => &$value) {
+                $value['working_year'] = $key + 1;
+            }
+
+            $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
+            $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page'] - 1) * $limit : 0;
+
+            $data = ['total' => count($result), 'data' => array_slice($result, $offset, $limit)];
+
+        }catch(\Exception $e){
+            Log::error($e);
         }
 
-        $limit = (isset($info['length']) && !is_null($info['length'])) ? $info['length'] : 10;
-        $offset = (isset($info['cur_page']) && !is_null($info['cur_page'])) ? ($info['cur_page']-1)*$limit : 0;
-
-        $data = ['total' => count($result), 'data' => array_slice($result,$offset,$limit)];
         return Common::jsonFormat('200', '获取成功',$data);
     }
 
